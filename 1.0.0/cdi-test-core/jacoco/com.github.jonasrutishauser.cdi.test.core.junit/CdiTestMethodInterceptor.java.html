@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CdiTestMethodInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test Implementation</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.core.junit</a> &gt; <span class="el_source">CdiTestMethodInterceptor.java</span></div><h1>CdiTestMethodInterceptor.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.core.junit;
+
+import static jakarta.enterprise.inject.spi.InterceptionType.AROUND_INVOKE;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+import org.junit.jupiter.api.function.Executable;
+
+import jakarta.enterprise.context.spi.CreationalContext;
+import jakarta.enterprise.inject.spi.AnnotatedMethod;
+import jakarta.enterprise.inject.spi.AnnotatedType;
+import jakarta.enterprise.inject.spi.BeanManager;
+import jakarta.enterprise.inject.spi.InjectionTarget;
+import jakarta.enterprise.inject.spi.Interceptor;
+
+class CdiTestMethodInterceptor&lt;T&gt; implements TestMethodInterceptor, CloseableResource {
+    private final BeanManager beanManager;
+    private final Class&lt;T&gt; testClass;
+    private final T testInstance;
+    private final InjectionTarget&lt;T&gt; injectionTarget;
+    private final CreationalContext&lt;T&gt; ctx;
+
+    public CdiTestMethodInterceptor(BeanManager beanManager, Class&lt;T&gt; testClass, T testInstance,
+<span class="fc" id="L33">            InjectionTarget&lt;T&gt; injectionTarget, CreationalContext&lt;T&gt; ctx) {</span>
+<span class="fc" id="L34">        this.beanManager = beanManager;</span>
+<span class="fc" id="L35">        this.testClass = testClass;</span>
+<span class="fc" id="L36">        this.testInstance = testInstance;</span>
+<span class="fc" id="L37">        this.injectionTarget = injectionTarget;</span>
+<span class="fc" id="L38">        this.ctx = ctx;</span>
+<span class="fc" id="L39">    }</span>
+
+    public void intercept(Method method, List&lt;Object&gt; parameters, Executable proceed) throws Throwable {
+<span class="fc" id="L42">        Annotation[] interceptorBindings = getInterceptorBindings(beanManager.createAnnotatedType(testClass), method);</span>
+<span class="fc" id="L43">        List&lt;Interceptor&lt;?&gt;&gt; interceptors = Collections.emptyList();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (interceptorBindings.length != 0) {</span>
+<span class="nc" id="L45">            interceptors = beanManager.resolveInterceptors(AROUND_INVOKE, interceptorBindings);</span>
+        }
+<span class="fc" id="L47">        new InvocationContext(testInstance, method, parameters.toArray(), new HashMap&lt;&gt;(), interceptors, proceed)</span>
+<span class="fc" id="L48">                .proceed();</span>
+<span class="fc" id="L49">    }</span>
+
+    private class InvocationContext extends TestMethodInvocationContext&lt;T&gt; {
+        private final List&lt;Interceptor&lt;?&gt;&gt; remainingInterceptors;
+        private final Executable proceed;
+
+        public InvocationContext(T target, Method method, Object[] parameters, Map&lt;String, Object&gt; contextData,
+<span class="fc" id="L56">                List&lt;Interceptor&lt;?&gt;&gt; remainingInterceptors, Executable proceed) {</span>
+<span class="fc" id="L57">            super(target, method, parameters, contextData);</span>
+<span class="fc" id="L58">            this.remainingInterceptors = remainingInterceptors;</span>
+<span class="fc" id="L59">            this.proceed = proceed;</span>
+<span class="fc" id="L60">        }</span>
+
+        @Override
+        public Object proceed() throws Exception {
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            if (remainingInterceptors.isEmpty()) {</span>
+                try {
+<span class="fc" id="L66">                    proceed.execute();</span>
+<span class="nc" id="L67">                } catch (Exception | Error e) {</span>
+<span class="nc" id="L68">                    throw e;</span>
+<span class="nc" id="L69">                } catch (Throwable t) {</span>
+<span class="nc" id="L70">                    throw new UndeclaredThrowableException(t);</span>
+<span class="fc" id="L71">                }</span>
+            } else {
+<span class="nc" id="L73">                callInterceptor(remainingInterceptors.get(0));</span>
+            }
+<span class="fc" id="L75">            return null;</span>
+        }
+
+        private &lt;I&gt; void callInterceptor(Interceptor&lt;I&gt; interceptor) throws Exception {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L80">            I instance = (I) beanManager.getReference(interceptor, interceptor.getBeanClass(), ctx);</span>
+<span class="nc" id="L81">            interceptor.intercept(AROUND_INVOKE, instance,</span>
+<span class="nc" id="L82">                    new InvocationContext(testInstance, getMethod(), getParameters(), getContextData(),</span>
+<span class="nc" id="L83">                            remainingInterceptors.subList(1, remainingInterceptors.size()), proceed));</span>
+<span class="nc" id="L84">        }</span>
+    }
+
+    private Annotation[] getInterceptorBindings(AnnotatedType&lt;?&gt; annotatedType, Method method) {
+<span class="fc" id="L88">        return Stream</span>
+<span class="fc" id="L89">                .concat(annotatedType.getAnnotations().stream(),</span>
+<span class="fc" id="L90">                        annotatedType.getMethods().stream().filter(m -&gt; method.equals(m.getJavaMember()))</span>
+<span class="fc" id="L91">                                .map(AnnotatedMethod::getAnnotations).flatMap(Set::stream))</span>
+<span class="fc" id="L92">                .filter(a -&gt; beanManager.isInterceptorBinding(a.annotationType())).toArray(Annotation[]::new);</span>
+    }
+
+    @Override
+    public void close() {
+<span class="fc" id="L97">        injectionTarget.preDestroy(testClass.cast(testInstance));</span>
+<span class="fc" id="L98">        ctx.release();</span>
+<span class="fc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

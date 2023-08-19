@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CdiContainer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test Implementation</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.core.junit</a> &gt; <span class="el_source">CdiContainer.java</span></div><h1>CdiContainer.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.core.junit;
+
+import org.jboss.logging.Logger;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.jboss.weld.exceptions.IllegalStateException;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+import org.junit.jupiter.api.extension.Extensions;
+
+import com.github.jonasrutishauser.cdi.test.api.TestInfo;
+import com.github.jonasrutishauser.cdi.test.api.annotations.ActivatableTestImplementation;
+import com.github.jonasrutishauser.cdi.test.core.context.ContextControl;
+import com.github.jonasrutishauser.cdi.test.core.interceptor.TestImplementationManager;
+
+import jakarta.enterprise.context.spi.CreationalContext;
+import jakarta.enterprise.inject.AmbiguousResolutionException;
+import jakarta.enterprise.inject.Any;
+import jakarta.enterprise.inject.spi.AnnotatedType;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.BeanManager;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.spi.InjectionTarget;
+import jakarta.inject.Singleton;
+
+<span class="fc" id="L26">class CdiContainer implements CloseableResource {</span>
+
+<span class="fc" id="L28">    private static final Logger LOGGER = Logger.getLogger(CdiContainer.class);</span>
+
+<span class="fc" id="L30">    private final Weld weld = new Weld();</span>
+
+    private WeldContainer weldContainer;
+
+    public void setTest(TestInfo testInfo) {
+<span class="pc bpc" id="L35" title="1 of 4 branches missed.">        if (weldContainer == null || !weldContainer.isRunning()) {</span>
+<span class="fc" id="L36">            initialize(testInfo);</span>
+        }
+<span class="fc" id="L38">        contextControl().start(testInfo);</span>
+<span class="fc" id="L39">    }</span>
+
+    public void testEnded() {
+<span class="fc" id="L42">        contextControl().preStop();</span>
+<span class="fc" id="L43">    }</span>
+
+    public void clearTest() {
+<span class="fc" id="L46">        contextControl().stop();</span>
+<span class="fc" id="L47">    }</span>
+
+    public &lt;T&gt; TestMethodInterceptor inject(Object testInstance, Class&lt;T&gt; testClass) {
+<span class="fc" id="L50">        BeanManager beanManager = weldContainer.getBeanManager();</span>
+<span class="fc" id="L51">        AnnotatedType&lt;T&gt; annotatedType = beanManager.createAnnotatedType(testClass);</span>
+        Bean&lt;T&gt; bean;
+        try {
+<span class="fc" id="L54">            bean = (Bean&lt;T&gt;) beanManager.resolve(beanManager.getBeans(testClass, Any.Literal.INSTANCE));</span>
+<span class="nc" id="L55">        } catch (AmbiguousResolutionException e) {</span>
+<span class="nc" id="L56">            LOGGER.warnv(&quot;Failed to get test instance bean: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L57">            bean = null;</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc" id="L59">        InjectionTarget&lt;T&gt; injectionTarget = beanManager.getInjectionTargetFactory(annotatedType)</span>
+<span class="fc" id="L60">                .createInjectionTarget(bean);</span>
+<span class="fc" id="L61">        CreationalContext&lt;T&gt; ctx = beanManager.createCreationalContext(bean);</span>
+<span class="fc" id="L62">        injectionTarget.inject(testClass.cast(testInstance), ctx);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (InjectionPoint ip : injectionTarget.getInjectionPoints()) {</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (ip.getType() instanceof Class</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                    &amp;&amp; ((Class&lt;?&gt;) ip.getType()).isAnnotationPresent(ActivatableTestImplementation.class)) {</span>
+<span class="fc" id="L66">                weldContainer.select(TestImplementationManager.class).get()</span>
+<span class="fc" id="L67">                        .enableTestImplementation((Class&lt;?&gt;) ip.getType());</span>
+            }
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">        injectionTarget.postConstruct(testClass.cast(testInstance));</span>
+<span class="fc" id="L71">        return new CdiTestMethodInterceptor&lt;T&gt;(weldContainer.getBeanManager(), testClass, testClass.cast(testInstance),</span>
+                injectionTarget, ctx);
+    }
+
+    private ContextControl contextControl() {
+<span class="fc" id="L76">        return weldContainer.select(ContextControl.class).get();</span>
+    }
+
+    private void initialize(TestInfo testInfo) {
+<span class="fc" id="L80">        LOGGER.info(&quot;Booting CDI container&quot;);</span>
+<span class="fc" id="L81">        long start = System.currentTimeMillis();</span>
+<span class="fc" id="L82">        weld.addExtension(new CdiTestExtension(testInfo));</span>
+<span class="fc" id="L83">        addBeans();</span>
+<span class="fc" id="L84">        weldContainer = weld.initialize();</span>
+<span class="fc" id="L85">        long end = System.currentTimeMillis();</span>
+<span class="fc" id="L86">        LOGGER.infov(&quot;Booting CDI container finished in {0} ms&quot;, end - start);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (!weldContainer.isRunning()) {</span>
+<span class="nc" id="L88">            throw new IllegalStateException(&quot;Failed to start CDI container&quot;);</span>
+        }
+<span class="fc" id="L90">    }</span>
+
+    private void addBeans() {
+<span class="fc" id="L93">        weld.addBeanDefiningAnnotations(Singleton.class, ExtendWith.class, Extensions.class);</span>
+<span class="fc" id="L94">    }</span>
+
+    @Override
+    public void close() throws Throwable {
+<span class="fc" id="L98">        weld.shutdown();</span>
+<span class="fc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
