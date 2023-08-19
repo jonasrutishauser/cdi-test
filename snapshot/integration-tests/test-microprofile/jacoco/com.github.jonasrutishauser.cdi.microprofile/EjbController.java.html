@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EjbController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">test-microprofile</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.microprofile</a> &gt; <span class="el_source">EjbController.java</span></div><h1>EjbController.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.microprofile;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.ejb.Singleton;
+import jakarta.inject.Inject;
+
+@Singleton
+<span class="fc" id="L9">public class EjbController {</span>
+
+    @Inject
+    @ConfigProperty(name = &quot;some.string.property&quot;)
+    private String stringProperty;
+
+    @Inject
+    @ConfigProperty(name = &quot;some.integer.property&quot;)
+    private Integer intProperty;
+
+    @Inject
+    @ConfigProperty(name = &quot;some.boolean.property&quot;)
+    private Boolean boolProperty;
+
+    @Inject
+    @ConfigProperty(name = &quot;some.long.property&quot;)
+    private Long longProperty;
+
+    @Inject
+    @ConfigProperty(name = &quot;some.horse.property&quot;)
+    private Horse horseProperty;
+
+    public String getStringProperty() {
+<span class="fc" id="L32">        return stringProperty;</span>
+    }
+
+    public int getIntegerProperty() {
+<span class="fc" id="L36">        return intProperty;</span>
+    }
+
+    public boolean getBoolProperty() {
+<span class="fc" id="L40">        return boolProperty;</span>
+    }
+
+    public long getLongProperty() {
+<span class="fc" id="L44">        return longProperty;</span>
+    }
+
+    public String getHorseProperty() {
+<span class="fc" id="L48">        return horseProperty.getName();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
