@@ -19,7 +19,7 @@
 		components</description>
 
 	<properties>
-		<root.artifactId>cdi-instance-handle</root.artifactId>
+		<root.artifactId>cdi-test</root.artifactId>
 
 		<maven.compiler.release>11</maven.compiler.release>
 	</properties>
