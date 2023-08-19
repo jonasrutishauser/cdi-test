@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+test-core,com.github.jonasrutishauser.cdi.testing,BaseBean,0,10,0,0,0,4,0,3,0,3
+test-core,com.github.jonasrutishauser.cdi.testing,RequestBean,0,11,0,0,0,4,0,2,0,2
+test-core,com.github.jonasrutishauser.cdi.testing,DependentScopedBean,0,14,0,0,0,4,0,3,0,3
+test-core,com.github.jonasrutishauser.cdi.testing,ProducedBeanProducer,0,8,0,0,0,2,0,2,0,2
+test-core,com.github.jonasrutishauser.cdi.testing,ProducedBean,0,9,0,0,0,4,0,2,0,2
+test-core,com.github.jonasrutishauser.cdi.testing,ApplicationBean,0,3,0,0,0,1,0,1,0,1
+test-core,com.github.jonasrutishauser.cdi.testing,OtherApplicationBean,3,0,0,0,1,0,1,0,1,0
