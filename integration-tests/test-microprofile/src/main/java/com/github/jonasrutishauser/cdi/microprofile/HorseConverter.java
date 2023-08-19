@@ -1,0 +1,16 @@
+package com.github.jonasrutishauser.cdi.microprofile;
+
+import org.eclipse.microprofile.config.spi.Converter;
+
+import jakarta.annotation.Priority;
+
+/**
+ * Converter for properties of type Horse.
+ */
+@Priority(1000)
+public class HorseConverter implements Converter<Horse> {
+    @Override
+    public Horse convert(String value) {
+        return ImmutableHorse.builder().name(value).build();
+    }
+}

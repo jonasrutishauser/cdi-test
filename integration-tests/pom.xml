@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.jonasrutishauser</groupId>
+		<artifactId>cdi-test</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>integration-tests</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<sonar.skip>true</sonar.skip>
+		<maven.install.skip>true</maven.install.skip>
+		<maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+	<modules>
+		<module>test-core</module>
+		<module>test-jee</module>
+		<module>test-microprofile</module>
+	</modules>
+
+	<profiles>
+		<profile>
+			<id>ee10</id>
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>jakarta.platform</groupId>
+						<artifactId>jakarta.jakartaee-bom</artifactId>
+						<version>10.0.0</version>
+						<type>pom</type>
+						<scope>import</scope>
+					</dependency>
+					<dependency>
+						<groupId>org.jboss.weld</groupId>
+						<artifactId>weld-core-bom</artifactId>
+						<version>5.1.1.Final</version>
+						<type>pom</type>
+						<scope>import</scope>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+		</profile>
+	</profiles>
+</project>

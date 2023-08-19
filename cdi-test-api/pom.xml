@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.jonasrutishauser</groupId>
+		<artifactId>cdi-test</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>cdi-test-api</artifactId>
+
+	<description>Basic annotations and interfaces for cdi-test</description>
+	<name>CDI Test API</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>jakarta.enterprise</groupId>
+			<artifactId>jakarta.enterprise.cdi-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.immutables</groupId>
+			<artifactId>value</artifactId>
+			<version>2.9.2</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
