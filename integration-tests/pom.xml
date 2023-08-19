@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.jonasrutishauser</groupId>
 		<artifactId>cdi-test</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>integration-tests</artifactId>
@@ -16,6 +16,7 @@
 		<sonar.skip>true</sonar.skip>
 		<maven.install.skip>true</maven.install.skip>
 		<maven.deploy.skip>true</maven.deploy.skip>
+		<maven.site.skip>true</maven.site.skip>
 	</properties>
 	<modules>
 		<module>test-core</module>
