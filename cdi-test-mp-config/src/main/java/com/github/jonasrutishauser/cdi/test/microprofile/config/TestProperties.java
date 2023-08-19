@@ -24,7 +24,7 @@ class TestProperties {
         return initialized;
     }
 
-    void setTestProperties(@Observes @Initialized(TestScoped.class) TestInfo testInfo) throws Exception {
+    void setTestProperties(@Observes @Initialized(TestScoped.class) TestInfo testInfo) {
         for (ConfigPropertyValue property : testInfo.getTestClass().getAnnotationsByType(ConfigPropertyValue.class)) {
             properties.put(property.name(), property.value());
         }

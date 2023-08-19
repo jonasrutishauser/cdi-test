@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.persistence.transaction.JTA11TransactionController;
+import org.eclipse.persistence.transaction.JTATransactionController;
 
 import com.arjuna.ats.jta.TransactionManager;
 import com.arjuna.ats.jta.common.jtaPropertyManager;
@@ -36,7 +37,7 @@ public class TestEntityResources {
 
     static void addAdditionalProperties(String persistenceUnit, Map<String, String> properties) {
         if (!properties.isEmpty()) {
-            additionalProperties.computeIfAbsent(persistenceUnit, $ -> new ConcurrentHashMap<>()).putAll(properties);
+            additionalProperties.computeIfAbsent(persistenceUnit, key -> new ConcurrentHashMap<>()).putAll(properties);
         }
     }
 
@@ -63,10 +64,7 @@ public class TestEntityResources {
     }
 
     private EntityManager createEntityManager(String name) {
-        EntityManagerFactory emf = resolveEntityManagerFactory(name);
-        EntityManager entityManager = emf.createEntityManager();
-        // TODO: allow execution of some initialization scripts
-        return entityManager;
+        return resolveEntityManagerFactory(name).createEntityManager();
     }
 
     private EntityManagerFactory createEntityManagerFactory(String persistenceUnit) {
@@ -87,7 +85,7 @@ public class TestEntityResources {
 
     private static class EclipselinkSupport {
         private static void install() {
-            JTA11TransactionController.setDefaultTransactionManager(TransactionManager.transactionManager());
+            JTATransactionController.setDefaultTransactionManager(TransactionManager.transactionManager());
             JTA11TransactionController.setDefaultTransactionSynchronizationRegistry(
                     jtaPropertyManager.getJTAEnvironmentBean().getTransactionSynchronizationRegistry());
         }

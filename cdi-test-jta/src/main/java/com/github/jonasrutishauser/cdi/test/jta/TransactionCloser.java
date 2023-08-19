@@ -14,6 +14,9 @@ import jakarta.transaction.UserTransaction;
 class TransactionCloser {
     private static final Logger LOGGER = Logger.getLogger(TransactionCloser.class);
 
+    private TransactionCloser() {
+    }
+
     static void closeOpenTransactions(@Observes @BeforeDestroyed(TestScoped.class) Object event,
             UserTransaction userTransaction) {
         try {

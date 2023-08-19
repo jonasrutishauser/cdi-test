@@ -51,13 +51,13 @@ public class EjbSupportBeanArchiveBuilder extends BeanArchiveBuilder {
             @Override
             public Collection<EjbDescriptor<?>> getEjbs() {
                 if (ejbs == null) {
-                    ejbs = discoverEjbs();
+                    discoverEjbs();
                 }
                 return ejbs;
             }
 
-            private Collection<EjbDescriptor<?>> discoverEjbs() {
-                Collection<EjbDescriptor<?>> ejbs = new ArrayList<>();
+            private void discoverEjbs() {
+                ejbs = new ArrayList<>();
                 for (String className : classes) {
                     Class<?> clazz = Reflections.loadClass(getServices().get(ResourceLoader.class), className);
                     if (clazz == null) {
@@ -68,7 +68,6 @@ public class EjbSupportBeanArchiveBuilder extends BeanArchiveBuilder {
                         ejbs.add(new EjbDescriptorImpl<>(clazz));
                     }
                 }
-                return ejbs;
             }
         };
     }

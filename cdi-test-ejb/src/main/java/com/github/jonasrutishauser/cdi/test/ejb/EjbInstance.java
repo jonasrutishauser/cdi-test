@@ -14,7 +14,7 @@ import jakarta.inject.Qualifier;
 @Target({TYPE})
 @interface EjbInstance {
     static class Literal extends AnnotationLiteral<EjbInstance> implements EjbInstance {
-        public static EjbInstance INSTANCE = new Literal();
+        public static final EjbInstance INSTANCE = new Literal();
 
         private Literal() {
         }

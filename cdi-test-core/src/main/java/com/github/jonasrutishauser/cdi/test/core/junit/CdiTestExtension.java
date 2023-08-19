@@ -79,7 +79,7 @@ public class CdiTestExtension implements Extension {
                     .remove(ApplicationScoped.class::isInstance).add(TestScoped.Literal.INSTANCE);
             for (AnnotatedMethodConfigurator<?> method : configurator.methods()) {
                 AnnotatedMethod<?> annotatedMethod = method.getAnnotated();
-                if (annotatedMethod.getParameters().size() > 0
+                if (!annotatedMethod.getParameters().isEmpty()
                         && annotatedMethod.getParameters().get(0).isAnnotationPresent(Observes.class)) {
                     if (annotatedMethod.getParameters().get(0).isAnnotationPresent(Initialized.class)) {
                         method.params().get(0).remove(Initialized.class::isInstance)
@@ -144,7 +144,7 @@ public class CdiTestExtension implements Extension {
 
     public void registerTestImplementation(Type type, AnnotatedType<?> testImplementation) {
         if (!Object.class.equals(type)) {
-            testImplementations.computeIfAbsent(type, $ -> new HashSet<>()).add(testImplementation.getJavaClass());
+            testImplementations.computeIfAbsent(type, key -> new HashSet<>()).add(testImplementation.getJavaClass());
         }
     }
 

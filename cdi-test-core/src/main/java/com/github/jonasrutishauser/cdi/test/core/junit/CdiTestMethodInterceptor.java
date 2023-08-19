@@ -64,9 +64,7 @@ class CdiTestMethodInterceptor<T> implements TestMethodInterceptor, CloseableRes
             if (remainingInterceptors.isEmpty()) {
                 try {
                     proceed.execute();
-                } catch (Exception e) {
-                    throw e;
-                } catch (Error e) {
+                } catch (Exception | Error e) {
                     throw e;
                 } catch (Throwable t) {
                     throw new UndeclaredThrowableException(t);

@@ -79,14 +79,10 @@ public class TestTransactionServices implements TransactionServices {
     public boolean isTransactionActive() {
         try {
             int status = TransactionManager.transactionManager().getStatus();
-            if (status == Status.STATUS_ACTIVE || status == Status.STATUS_COMMITTING
+            return status == Status.STATUS_ACTIVE || status == Status.STATUS_COMMITTING
                     || status == Status.STATUS_MARKED_ROLLBACK || status == Status.STATUS_PREPARED
                     || status == Status.STATUS_PREPARING || status == Status.STATUS_ROLLING_BACK
-                    || status == Status.STATUS_UNKNOWN) {
-                return true;
-            } else {
-                return false;
-            }
+                    || status == Status.STATUS_UNKNOWN;
         } catch (SystemException se) {
             LOG.error("Cannot obtain the status of the transaction", se);
             return false;

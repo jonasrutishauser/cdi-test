@@ -14,7 +14,7 @@ abstract class TestMethodInvocationContext<T> implements InvocationContext {
     private final Method method;
     private Object[] parameters;
     
-    public TestMethodInvocationContext(T target, Method method, Object[] parameters, Map<String, Object> contextData) {
+    protected TestMethodInvocationContext(T target, Method method, Object[] parameters, Map<String, Object> contextData) {
         this.target = target;
         this.method = method;
         this.parameters = parameters;
