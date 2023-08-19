@@ -73,8 +73,8 @@
 		<module>cdi-test-jpa</module>
 		<module>cdi-test-ejb</module>
 		<module>cdi-test-mp-config</module>
-		<module>cdi-test-mp-metrics</module>
 		<module>integration-tests</module>
+		<module>cdi-test-mp-metrics</module>
 	</modules>
 
 	<scm>
