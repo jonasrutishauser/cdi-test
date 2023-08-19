@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContextControl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test Implementation</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.core.context</a> &gt; <span class="el_source">ContextControl.java</span></div><h1>ContextControl.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.core.context;
+
+import java.util.HashMap;
+
+import org.jboss.weld.context.bound.BoundConversationContext;
+import org.jboss.weld.context.bound.BoundSessionContext;
+import org.jboss.weld.context.bound.MutableBoundRequest;
+
+import com.github.jonasrutishauser.cdi.test.api.TestInfo;
+import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.BeforeDestroyed;
+import jakarta.enterprise.context.Destroyed;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.control.RequestContextController;
+import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.BeanManager;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
+public class ContextControl {
+
+    private final TestContext testContext;
+    private final Event&lt;TestInfo&gt; event;
+
+    private final BoundSessionContext sessionContext;
+    private final BoundConversationContext conversationContext;
+    private final RequestContextController requestContextController;
+
+    ContextControl() {
+<span class="nc" id="L32">        this(null, null, null, null, null);</span>
+<span class="nc" id="L33">    }</span>
+    
+    @Inject
+    ContextControl(BeanManager beanManager, Event&lt;TestInfo&gt; event, BoundSessionContext sessionContext,
+<span class="fc" id="L37">            BoundConversationContext conversationContext, RequestContextController requestContextController) {</span>
+<span class="fc" id="L38">        this.testContext = (TestContext) beanManager.getContext(TestScoped.class);</span>
+<span class="fc" id="L39">        this.event = event;</span>
+<span class="fc" id="L40">        this.sessionContext = sessionContext;</span>
+<span class="fc" id="L41">        this.conversationContext = conversationContext;</span>
+<span class="fc" id="L42">        this.requestContextController = requestContextController;</span>
+<span class="fc" id="L43">    }</span>
+
+    public void start(TestInfo testInfo) {
+<span class="fc" id="L46">        testContext.setTestInfo(testInfo);</span>
+<span class="fc" id="L47">        event.select(Initialized.Literal.of(TestScoped.class)).fire(testInfo);</span>
+<span class="fc" id="L48">        HashMap&lt;String, Object&gt; sessionStore = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L49">        sessionContext.associate(sessionStore);</span>
+<span class="fc" id="L50">        sessionContext.activate();</span>
+<span class="fc" id="L51">        conversationContext.associate(new MutableBoundRequest(new HashMap&lt;&gt;(), sessionStore));</span>
+<span class="fc" id="L52">        conversationContext.activate();</span>
+<span class="fc" id="L53">        requestContextController.activate();</span>
+<span class="fc" id="L54">    }</span>
+
+    public void preStop() {
+<span class="fc" id="L57">        event.select(BeforeDestroyed.Literal.of(TestScoped.class)).fire(testContext.getTestInfo());</span>
+<span class="fc" id="L58">    }</span>
+
+    public TestInfo stop() {
+<span class="fc" id="L61">        requestContextController.deactivate();</span>
+<span class="fc" id="L62">        conversationContext.deactivate();</span>
+<span class="fc" id="L63">        sessionContext.invalidate();</span>
+<span class="fc" id="L64">        sessionContext.deactivate();</span>
+<span class="fc" id="L65">        sessionContext.dissociate(null);</span>
+<span class="fc" id="L66">        TestInfo testInfo = testContext.clearTestInfo();</span>
+<span class="fc" id="L67">        event.select(Destroyed.Literal.of(TestScoped.class)).fire(testInfo);</span>
+<span class="fc" id="L68">        return testInfo;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
