@@ -20,7 +20,9 @@ import io.smallrye.metrics.app.CounterImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Destroyed;
 import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.spi.AnnotatedType;
+import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
@@ -36,18 +38,20 @@ class MetricsCleanup {
         this.registry = registry;
     }
 
-    void cleanup(@Observes @Destroyed(TestScoped.class) TestInfo event) {
-        registry.removeMatching((metricId, metric) -> "ForwardingGauge".equals(metric.getClass().getSimpleName()) && isTestScopedDelegate(metric));
+    void cleanup(@Observes @Destroyed(TestScoped.class) TestInfo event, BeanManager beanManager) {
+        registry.removeMatching((metricId, metric) -> "ForwardingGauge".equals(metric.getClass().getSimpleName()) && isTestScopedDelegate(metric, beanManager));
         registry.getCounters().values().forEach(this::reset);
     }
 
-    private boolean isTestScopedDelegate(Metric metric) {
+    private boolean isTestScopedDelegate(Metric metric, BeanManager beanManager) {
         try {
             Field field = metric.getClass().getDeclaredField("object");
             field.setAccessible(true);
             Object delegate = field.get(metric);
             AnnotatedType<?> annotatedType = getAnnotatedType(delegate);
-            return annotatedType != null && annotatedType.isAnnotationPresent(TestScoped.class);
+            return (annotatedType != null && annotatedType.isAnnotationPresent(TestScoped.class))
+                    || beanManager.getBeans(delegate.getClass(), Any.Literal.INSTANCE).stream()
+                            .anyMatch(bean -> TestScoped.class.equals(bean.getScope()));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             LOGGER.warn("failed to get delegate object");
         }

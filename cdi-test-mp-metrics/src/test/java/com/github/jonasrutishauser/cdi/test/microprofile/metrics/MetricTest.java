@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.eclipse.microprofile.metrics.Gauge;
 import org.eclipse.microprofile.metrics.MetricID;
 import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,13 +34,25 @@ class MetricTest {
     private ApplicationToTestScopedMetricSample applicationToTestScopedSample;
 
     @Inject
+    private TestGauge testGauge;
+
+    @Inject
     private MetricRegistry registry;
 
     @Test
     void testInjection() {
         assertNotNull(applicationScopedSample);
         assertNotNull(testScopedSample);
+        assertNotNull(applicationToTestScopedSample);
+        assertNotNull(testGauge);
         assertNotNull(registry);
+    }
+
+    @RepeatedTest(3)
+    void testGauge() {
+        testGauge.setValue(4);
+        
+        assertEquals(4l, registry.getGauge(new MetricID("testGauge")).getValue());
     }
 
     private ApplicationScopedMetricSample getApplicationScopedSample() {
