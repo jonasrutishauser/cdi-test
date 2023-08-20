@@ -2,13 +2,12 @@ package com.github.jonasrutishauser.cdi.test.core.junit;
 
 import static java.util.function.Predicate.isEqual;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -65,9 +64,16 @@ public class CdiTestExtension implements Extension {
         try {
             Enumeration<URL> resources = getClass().getClassLoader().getResources(fileName);
             while (resources.hasMoreElements()) {
-                result.addAll(Files.readAllLines(Paths.get(resources.nextElement().toURI())));
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(resources.nextElement().openStream()))) {
+                    for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                        if (!line.isBlank() && !line.trim().startsWith("#")) {
+                            result.add(line.trim());
+                        }
+                    }
+                }
             }
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
         return result;
