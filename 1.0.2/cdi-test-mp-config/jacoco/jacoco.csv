@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+CDI Test microprofile config,com.github.jonasrutishauser.cdi.test.microprofile.config,TestProperties,0,79,0,4,0,12,0,7,0,5
+CDI Test microprofile config,com.github.jonasrutishauser.cdi.test.microprofile.config,TestConfigSource,0,44,0,6,0,10,0,9,0,6
