@@ -31,9 +31,7 @@ public class TestContext implements AlterableContext {
     @SuppressWarnings("unchecked")
     public <T> T get(Contextual<T> contextual, CreationalContext<T> creationalContext) {
         return getSpecial(contextual).orElseGet(() -> (T) instances
-                .computeIfAbsent(contextual,
-                        c -> new BeanInstance<>(contextual, creationalContext, contextual.create(creationalContext)))
-                .getInstance());
+                .computeIfAbsent(contextual, c -> new BeanInstance<>(contextual, creationalContext)).getInstance());
     }
 
     @Override
@@ -86,15 +84,24 @@ public class TestContext implements AlterableContext {
     private static class BeanInstance<T> {
         private final Contextual<T> contextual;
         private final CreationalContext<T> ctx;
-        private final T instance;
-        public BeanInstance(Contextual<T> contextual, CreationalContext<T> ctx, T instance) {
+        private T instance;
+
+        public BeanInstance(Contextual<T> contextual, CreationalContext<T> ctx) {
             this.contextual = contextual;
             this.ctx = ctx;
-            this.instance = instance;
         }
+
         public T getInstance() {
+            if (instance == null) {
+                synchronized (this) {
+                    if (instance == null) {
+                        instance = contextual.create(ctx);
+                    }
+                }
+            }
             return instance;
         }
+
         public void destroy() {
             contextual.destroy(instance, ctx);
         }
