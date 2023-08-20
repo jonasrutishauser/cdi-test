@@ -10,6 +10,6 @@ CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestE
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,TestMethodInvocationContext,21,15,0,0,7,6,7,1,7,1
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestJunitExtension,0,116,1,3,0,21,1,8,0,7
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestMethodInterceptor,6,96,1,1,1,21,1,7,0,7
-CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.context,TestContext,16,138,6,10,5,25,6,15,1,12
+CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.context,TestContext,16,135,6,10,5,23,6,15,1,12
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.context,ContextControl,8,118,0,0,2,26,1,4,1,4
-CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.context,TestContext.BeanInstance,0,23,0,0,0,8,0,3,0,3
+CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.context,TestContext.BeanInstance,0,40,1,3,0,12,1,4,0,3

@@ -31,77 +31,84 @@ import jakarta.enterprise.inject.spi.Bean;
     @SuppressWarnings(&quot;unchecked&quot;)
     public &lt;T&gt; T get(Contextual&lt;T&gt; contextual, CreationalContext&lt;T&gt; creationalContext) {
 <span class="fc" id="L33">        return getSpecial(contextual).orElseGet(() -&gt; (T) instances</span>
-<span class="fc" id="L34">                .computeIfAbsent(contextual,</span>
-<span class="fc" id="L35">                        c -&gt; new BeanInstance&lt;&gt;(contextual, creationalContext, contextual.create(creationalContext)))</span>
-<span class="fc" id="L36">                .getInstance());</span>
+<span class="fc" id="L34">                .computeIfAbsent(contextual, c -&gt; new BeanInstance&lt;&gt;(contextual, creationalContext)).getInstance());</span>
     }
 
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public &lt;T&gt; T get(Contextual&lt;T&gt; contextual) {
-<span class="fc" id="L42">        return getSpecial(contextual).orElseGet(() -&gt; {</span>
-<span class="fc" id="L43">            BeanInstance&lt;T&gt; instance = (BeanInstance&lt;T&gt;) instances.get(contextual);</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            return instance == null ? null : instance.getInstance();</span>
+<span class="fc" id="L40">        return getSpecial(contextual).orElseGet(() -&gt; {</span>
+<span class="fc" id="L41">            BeanInstance&lt;T&gt; instance = (BeanInstance&lt;T&gt;) instances.get(contextual);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            return instance == null ? null : instance.getInstance();</span>
         });
     }
 
     @SuppressWarnings(&quot;unchecked&quot;)
     private &lt;T&gt; Optional&lt;T&gt; getSpecial(Contextual&lt;T&gt; contextual) {
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (!isActive()) {</span>
-<span class="nc" id="L51">            throw new ContextNotActiveException();</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (!isActive()) {</span>
+<span class="nc" id="L49">            throw new ContextNotActiveException();</span>
         }
-<span class="pc bpc" id="L53" title="1 of 4 branches missed.">        if (contextual instanceof Bean &amp;&amp; TestContext.class.equals(((Bean&lt;T&gt;) contextual).getBeanClass())) {</span>
-<span class="fc" id="L54">            return Optional.of((T) testInfo.get());</span>
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">        if (contextual instanceof Bean &amp;&amp; TestContext.class.equals(((Bean&lt;T&gt;) contextual).getBeanClass())) {</span>
+<span class="fc" id="L52">            return Optional.of((T) testInfo.get());</span>
         }
-<span class="pc bpc" id="L56" title="1 of 4 branches missed.">        if (contextual instanceof Bean &amp;&amp; testInfo.get().getTestClass().equals(((Bean&lt;T&gt;) contextual).getBeanClass())) {</span>
-<span class="fc" id="L57">            return Optional.of((T) testInfo.get().getTestInstance());</span>
+<span class="pc bpc" id="L54" title="1 of 4 branches missed.">        if (contextual instanceof Bean &amp;&amp; testInfo.get().getTestClass().equals(((Bean&lt;T&gt;) contextual).getBeanClass())) {</span>
+<span class="fc" id="L55">            return Optional.of((T) testInfo.get().getTestInstance());</span>
         }
-<span class="fc" id="L59">        return Optional.empty();</span>
+<span class="fc" id="L57">        return Optional.empty();</span>
     }
 
     @Override
     public boolean isActive() {
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        return testInfo.get() != null;</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        return testInfo.get() != null;</span>
     }
 
     @Override
     public void destroy(Contextual&lt;?&gt; contextual) {
-<span class="nc" id="L69">        BeanInstance&lt;?&gt; instance = instances.remove(contextual);</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (instance != null) {</span>
-<span class="nc" id="L71">            instance.destroy();</span>
+<span class="nc" id="L67">        BeanInstance&lt;?&gt; instance = instances.remove(contextual);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (instance != null) {</span>
+<span class="nc" id="L69">            instance.destroy();</span>
         }
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L71">    }</span>
 
     public void setTestInfo(TestInfo testInfo) {
-<span class="fc" id="L76">        this.testInfo.set(Objects.requireNonNull(testInfo));</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L74">        this.testInfo.set(Objects.requireNonNull(testInfo));</span>
+<span class="fc" id="L75">    }</span>
 
     TestInfo clearTestInfo() {
-<span class="fc" id="L80">        TestInfo oldValue = testInfo.getAndSet(null);</span>
-<span class="fc" id="L81">        instances.values().forEach(BeanInstance::destroy);</span>
-<span class="fc" id="L82">        instances.clear();</span>
-<span class="fc" id="L83">        return oldValue;</span>
+<span class="fc" id="L78">        TestInfo oldValue = testInfo.getAndSet(null);</span>
+<span class="fc" id="L79">        instances.values().forEach(BeanInstance::destroy);</span>
+<span class="fc" id="L80">        instances.clear();</span>
+<span class="fc" id="L81">        return oldValue;</span>
     }
 
     private static class BeanInstance&lt;T&gt; {
         private final Contextual&lt;T&gt; contextual;
         private final CreationalContext&lt;T&gt; ctx;
-        private final T instance;
-<span class="fc" id="L90">        public BeanInstance(Contextual&lt;T&gt; contextual, CreationalContext&lt;T&gt; ctx, T instance) {</span>
-<span class="fc" id="L91">            this.contextual = contextual;</span>
-<span class="fc" id="L92">            this.ctx = ctx;</span>
-<span class="fc" id="L93">            this.instance = instance;</span>
-<span class="fc" id="L94">        }</span>
+        private T instance;
+
+<span class="fc" id="L89">        public BeanInstance(Contextual&lt;T&gt; contextual, CreationalContext&lt;T&gt; ctx) {</span>
+<span class="fc" id="L90">            this.contextual = contextual;</span>
+<span class="fc" id="L91">            this.ctx = ctx;</span>
+<span class="fc" id="L92">        }</span>
+
         public T getInstance() {
-<span class="fc" id="L96">            return instance;</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (instance == null) {</span>
+<span class="fc" id="L96">                synchronized (this) {</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">                    if (instance == null) {</span>
+<span class="fc" id="L98">                        instance = contextual.create(ctx);</span>
+                    }
+<span class="fc" id="L100">                }</span>
+            }
+<span class="fc" id="L102">            return instance;</span>
         }
+
         public void destroy() {
-<span class="fc" id="L99">            contextual.destroy(instance, ctx);</span>
-<span class="fc" id="L100">        }</span>
+<span class="fc" id="L106">            contextual.destroy(instance, ctx);</span>
+<span class="fc" id="L107">        }</span>
     }
 
     TestInfo getTestInfo() {
-<span class="fc" id="L104">        return testInfo.get();</span>
+<span class="fc" id="L111">        return testInfo.get();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
