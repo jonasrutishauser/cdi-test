@@ -2,7 +2,7 @@ package com.github.jonasrutishauser.cdi.test.core.beans;
 
 import java.util.UUID;
 
-import jakarta.enterprise.context.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 
 @RequestScoped
 public class Request {

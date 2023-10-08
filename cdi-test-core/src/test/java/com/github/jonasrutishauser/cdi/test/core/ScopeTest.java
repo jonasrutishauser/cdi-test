@@ -6,14 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.beans.Request;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class ScopeTest {

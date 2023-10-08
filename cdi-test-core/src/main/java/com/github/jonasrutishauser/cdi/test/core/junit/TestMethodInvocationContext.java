@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import jakarta.interceptor.InvocationContext;
+import javax.interceptor.InvocationContext;
 
 abstract class TestMethodInvocationContext<T> implements InvocationContext {
 

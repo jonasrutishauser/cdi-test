@@ -8,7 +8,7 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 
 /**
  * Defines an environment entry (can be injected with

@@ -1,11 +1,11 @@
 package com.github.jonasrutishauser.cdi.test.ejb;
 
+import javax.enterprise.inject.spi.CDI;
+import javax.enterprise.inject.spi.InjectionPoint;
+
 import org.jboss.weld.injection.spi.EjbInjectionServices;
 import org.jboss.weld.injection.spi.ResourceReference;
 import org.jboss.weld.injection.spi.ResourceReferenceFactory;
-
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.enterprise.inject.spi.InjectionPoint;
 
 public class TestEjbInjectionServices implements EjbInjectionServices {
 

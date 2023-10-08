@@ -2,7 +2,7 @@ package com.github.jonasrutishauser.cdi.jpa;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class InvocationCounter {

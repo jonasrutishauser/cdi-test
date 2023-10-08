@@ -1,8 +1,8 @@
 package com.github.jonasrutishauser.cdi.jpa;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import javax.enterprise.context.RequestScoped;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RequestScoped
 public class RequestScopedUserService {

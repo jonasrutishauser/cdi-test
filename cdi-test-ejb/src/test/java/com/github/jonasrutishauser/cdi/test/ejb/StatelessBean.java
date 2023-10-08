@@ -1,7 +1,7 @@
 package com.github.jonasrutishauser.cdi.test.ejb;
 
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 @Stateless
 public class StatelessBean {

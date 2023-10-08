@@ -2,9 +2,9 @@ package com.github.jonasrutishauser.cdi.jpa;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 
 @EntityListeners(CounterEntityListener.class)
 @Entity

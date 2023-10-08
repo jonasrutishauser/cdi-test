@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.jpa;
 
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Startup
 @Singleton

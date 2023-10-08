@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
 
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
-import jakarta.enterprise.inject.Alternative;
-import jakarta.enterprise.inject.Stereotype;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Stereotype;
 
 /**
  * Use this annotation to mark Alternatives that should globally replace

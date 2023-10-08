@@ -3,9 +3,9 @@ package com.github.jonasrutishauser.cdi.test.microprofile.config;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.microprofile.config.spi.ConfigSource;
+import javax.enterprise.inject.spi.CDI;
 
-import jakarta.enterprise.inject.spi.CDI;
+import org.eclipse.microprofile.config.spi.ConfigSource;
 
 public class TestConfigSource implements ConfigSource {
 

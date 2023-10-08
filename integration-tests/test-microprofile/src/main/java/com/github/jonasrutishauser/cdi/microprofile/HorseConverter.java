@@ -1,8 +1,8 @@
 package com.github.jonasrutishauser.cdi.microprofile;
 
-import org.eclipse.microprofile.config.spi.Converter;
+import javax.annotation.Priority;
 
-import jakarta.annotation.Priority;
+import org.eclipse.microprofile.config.spi.Converter;
 
 /**
  * Converter for properties of type Horse.

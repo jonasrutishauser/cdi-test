@@ -7,6 +7,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.eclipse.microprofile.metrics.Gauge;
 import org.eclipse.microprofile.metrics.MetricID;
 import org.eclipse.microprofile.metrics.MetricRegistry;
@@ -18,8 +20,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class MetricTest {

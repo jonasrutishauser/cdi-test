@@ -16,18 +16,18 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.enterprise.concurrent.LastExecution;
+import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.enterprise.concurrent.ManagedScheduledExecutorService;
+import javax.enterprise.concurrent.ManagedThreadFactory;
+import javax.enterprise.concurrent.Trigger;
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.enterprise.concurrent.LastExecution;
-import jakarta.enterprise.concurrent.ManagedExecutorService;
-import jakarta.enterprise.concurrent.ManagedScheduledExecutorService;
-import jakarta.enterprise.concurrent.ManagedThreadFactory;
-import jakarta.enterprise.concurrent.Trigger;
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class ExecutorsTest {

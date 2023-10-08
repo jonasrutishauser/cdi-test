@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.testing;
 
-import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
+import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
 @TestScoped
 public class TestScopedBean {

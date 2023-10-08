@@ -2,6 +2,8 @@ package com.github.jonasrutishauser.cdi.test.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +13,6 @@ import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
 import com.github.jonasrutishauser.cdi.test.core.service.BackendServiceException;
 import com.github.jonasrutishauser.cdi.test.core.service.BackendServiceTestImplementation;
 import com.github.jonasrutishauser.cdi.test.core.service.SampleService;
-
-import jakarta.inject.Inject;
 
 /**
  * Demo and test auto-wiring of {@link Inject}ed test implementations.

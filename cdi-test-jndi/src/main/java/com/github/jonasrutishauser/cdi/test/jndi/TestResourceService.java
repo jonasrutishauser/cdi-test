@@ -2,6 +2,10 @@ package com.github.jonasrutishauser.cdi.test.jndi;
 
 import static javax.naming.Context.INITIAL_CONTEXT_FACTORY;
 
+import javax.annotation.Resource;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.CDI;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -9,11 +13,6 @@ import javax.naming.NamingException;
 import org.jboss.weld.injection.spi.helpers.AbstractResourceServices;
 import org.osjava.sj.SimpleJndi;
 import org.osjava.sj.jndi.MemoryContext;
-
-import jakarta.annotation.Resource;
-import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.enterprise.inject.spi.InjectionPoint;
 
 public class TestResourceService extends AbstractResourceServices {
 
@@ -46,7 +45,7 @@ public class TestResourceService extends AbstractResourceServices {
     @Override
     protected String getResourceName(InjectionPoint injectionPoint) {
         Resource resource = getResourceAnnotation(injectionPoint);
-        if (!resource.lookup().isBlank()) {
+        if (!resource.lookup().trim().isEmpty()) {
             return resource.lookup();
         }
         return super.getResourceName(injectionPoint);

@@ -1,7 +1,7 @@
 package com.github.jonasrutishauser.cdi.testing;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 @ApplicationScoped
 public class ApplicationBean extends BaseBean {

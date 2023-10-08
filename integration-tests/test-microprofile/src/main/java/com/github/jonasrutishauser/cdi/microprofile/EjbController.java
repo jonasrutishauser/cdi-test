@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.microprofile;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.ejb.Singleton;
+import javax.inject.Inject;
 
-import jakarta.ejb.Singleton;
-import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Singleton
 public class EjbController {

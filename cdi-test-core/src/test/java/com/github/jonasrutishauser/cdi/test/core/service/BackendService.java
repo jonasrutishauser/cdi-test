@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.test.core.service;
 
-import com.github.jonasrutishauser.cdi.test.core.beans.Person;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
-import jakarta.enterprise.context.Dependent;
-import jakarta.inject.Inject;
+import com.github.jonasrutishauser.cdi.test.core.beans.Person;
 
 @Dependent
 public class BackendService {

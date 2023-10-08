@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
-import jakarta.enterprise.inject.Stereotype;
+import javax.enterprise.inject.Stereotype;
 
 /**
  * Use this annotation to mark Alternatives that can be enabled per test class.

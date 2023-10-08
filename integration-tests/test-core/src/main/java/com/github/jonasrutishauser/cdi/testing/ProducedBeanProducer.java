@@ -1,7 +1,7 @@
 package com.github.jonasrutishauser.cdi.testing;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.inject.Produces;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 
 @RequestScoped
 public class ProducedBeanProducer {

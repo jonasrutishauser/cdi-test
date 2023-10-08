@@ -1,5 +1,8 @@
 package com.github.jonasrutishauser.cdi.test.microprofile.metrics;
 
+import javax.enterprise.inject.TransientReference;
+import javax.inject.Inject;
+
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricUnits;
@@ -8,9 +11,6 @@ import org.eclipse.microprofile.metrics.annotation.Metric;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.enterprise.inject.TransientReference;
-import jakarta.inject.Inject;
 
 @TestScoped
 public class TestScopedMetricSample extends AbstractMetricSample {

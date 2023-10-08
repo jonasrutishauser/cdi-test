@@ -3,18 +3,18 @@ package com.github.jonasrutishauser.cdi.test.jpa;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceProperty;
+import javax.transaction.UserTransaction;
+
 import org.h2.Driver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
 import com.github.jonasrutishauser.cdi.test.jndi.DataSourceEntry;
-
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceProperty;
-import jakarta.transaction.UserTransaction;
 
 @ExtendWith(CdiTestJunitExtension.class)
 @DataSourceEntry(name = "jdbc/cdi-test", driver = Driver.class, url = "jdbc:h2:mem:test", user = "sa", password = "sa")

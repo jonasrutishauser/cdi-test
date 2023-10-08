@@ -2,18 +2,18 @@ package com.github.jonasrutishauser.cdi.test.core;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import javax.enterprise.context.Destroyed;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.enterprise.context.Destroyed;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.event.Observes;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 
 /**
  * Test and demo lifecycle events.

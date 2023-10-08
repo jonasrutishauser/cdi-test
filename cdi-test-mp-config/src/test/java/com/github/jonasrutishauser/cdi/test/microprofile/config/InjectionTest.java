@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.NoSuchElementException;
 
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 @ConfigPropertyValue(name = "some.string.property", value = "valuefortestclass")

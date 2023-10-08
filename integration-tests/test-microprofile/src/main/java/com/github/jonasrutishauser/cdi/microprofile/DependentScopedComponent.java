@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.microprofile;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
-import jakarta.enterprise.context.Dependent;
-import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Dependent
 public class DependentScopedComponent {

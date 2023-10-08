@@ -1,18 +1,18 @@
 package com.github.jonasrutishauser.cdi.test.microprofile.config;
 
-import static jakarta.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
+import static javax.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Priority;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.annotation.Priority;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.event.Observes;
 
 @TestScoped
 class TestProperties {

@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.jonasrutishauser</groupId>
+		<groupId>com.github.jonasrutishauser.javax</groupId>
 		<artifactId>cdi-test</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>cdi-test-concurrency</artifactId>
@@ -32,13 +32,7 @@
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>jakarta.enterprise.concurrent</artifactId>
-			<version>2.0.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>jakarta.platform</groupId>
-					<artifactId>jakarta.jakartaee-api</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>1.1.1</version>
 		</dependency>
 
 		<dependency>

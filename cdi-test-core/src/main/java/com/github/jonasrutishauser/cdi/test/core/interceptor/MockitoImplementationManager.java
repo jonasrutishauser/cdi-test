@@ -11,11 +11,11 @@ import org.mockito.mock.MockCreationSettings;
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Priority;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.Alternative;
+import javax.annotation.PreDestroy;
+import javax.annotation.Priority;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Alternative;
 
 @TestScoped
 @Alternative

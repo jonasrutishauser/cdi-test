@@ -1,6 +1,6 @@
 package com.github.jonasrutishauser.cdi.test.ejb;
 
-import jakarta.ejb.Singleton;
+import javax.ejb.Singleton;
 
 @Singleton
 public class SingletonBean {

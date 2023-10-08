@@ -5,12 +5,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import javax.enterprise.inject.spi.CDI;
+import javax.persistence.EntityManager;
+
 import org.jboss.logging.Logger;
 import org.jboss.weld.injection.spi.ResourceReference;
 import org.jboss.weld.injection.spi.ResourceReferenceFactory;
-
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.persistence.EntityManager;
 
 public class EntityManagerResourceFactory implements ResourceReferenceFactory<EntityManager>, InvocationHandler {
     private static final Logger LOG = Logger.getLogger(EntityManagerResourceFactory.class);
@@ -28,7 +28,7 @@ public class EntityManagerResourceFactory implements ResourceReferenceFactory<En
         if (testEntityResources == null) {
             testEntityResources = CDI.current().select(TestEntityResources.class).get();
         }
-        return new ResourceReference<>() {
+        return new ResourceReference<EntityManager>() {
             @Override
             public EntityManager getInstance() {
                 return (EntityManager) Proxy.newProxyInstance(EntityManager.class.getClassLoader(),

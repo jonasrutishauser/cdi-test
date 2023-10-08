@@ -23,6 +23,9 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -32,10 +35,6 @@ import org.osjava.sj.loader.JndiLoader;
 
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.annotation.PreDestroy;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.event.Observes;
 
 @TestScoped
 class TestEnvEntries {

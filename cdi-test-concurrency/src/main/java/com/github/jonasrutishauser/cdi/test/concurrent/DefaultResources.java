@@ -2,17 +2,17 @@ package com.github.jonasrutishauser.cdi.test.concurrent;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import javax.enterprise.concurrent.ManagedScheduledExecutorService;
+import javax.enterprise.concurrent.ManagedThreadFactory;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Produces;
+
 import org.glassfish.enterprise.concurrent.AbstractManagedExecutorService.RejectPolicy;
 import org.glassfish.enterprise.concurrent.ManagedScheduledExecutorServiceImpl;
 import org.glassfish.enterprise.concurrent.ManagedThreadFactoryImpl;
 
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.enterprise.concurrent.ManagedScheduledExecutorService;
-import jakarta.enterprise.concurrent.ManagedThreadFactory;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Disposes;
-import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
 class DefaultResources {

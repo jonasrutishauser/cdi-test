@@ -1,11 +1,11 @@
 package com.github.jonasrutishauser.cdi.test.ejb;
 
+import javax.enterprise.inject.spi.CDI;
+
 import org.jboss.weld.ejb.api.SessionObjectReference;
 import org.jboss.weld.ejb.spi.EjbDescriptor;
 import org.jboss.weld.ejb.spi.EjbServices;
 import org.jboss.weld.ejb.spi.InterceptorBindings;
-
-import jakarta.enterprise.inject.spi.CDI;
 
 public class TestEjbServices implements EjbServices {
 

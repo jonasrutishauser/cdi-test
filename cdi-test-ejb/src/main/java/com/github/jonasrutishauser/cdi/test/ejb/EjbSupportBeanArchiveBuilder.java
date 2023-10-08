@@ -1,6 +1,7 @@
 package com.github.jonasrutishauser.cdi.test.ejb;
 
-import static java.util.stream.Collectors.toUnmodifiableList;
+import static java.util.Collections.unmodifiableCollection;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
 import java.lang.reflect.Method;
@@ -13,18 +14,18 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.ejb.Local;
+import javax.ejb.LocalBean;
+import javax.ejb.Singleton;
+import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+
 import org.jboss.weld.ejb.spi.BusinessInterfaceDescriptor;
 import org.jboss.weld.ejb.spi.EjbDescriptor;
 import org.jboss.weld.environment.deployment.WeldBeanDeploymentArchive;
 import org.jboss.weld.environment.deployment.discovery.BeanArchiveBuilder;
 import org.jboss.weld.environment.util.Reflections;
 import org.jboss.weld.resources.spi.ResourceLoader;
-
-import jakarta.ejb.Local;
-import jakarta.ejb.LocalBean;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Stateful;
-import jakarta.ejb.Stateless;
 
 public class EjbSupportBeanArchiveBuilder extends BeanArchiveBuilder {
 
@@ -99,8 +100,8 @@ public class EjbSupportBeanArchiveBuilder extends BeanArchiveBuilder {
                     interfaces = Stream.of(clazz.getInterfaces()[0]);
                 }
             }
-            return interfaces.<BusinessInterfaceDescriptor<?>>map(this::toBusinessInterfaceDescriptor)
-                    .collect(toUnmodifiableList());
+            return unmodifiableCollection(interfaces.<BusinessInterfaceDescriptor<?>>map(this::toBusinessInterfaceDescriptor)
+                    .collect(toList()));
         }
 
         private <I> BusinessInterfaceDescriptor<I> toBusinessInterfaceDescriptor(Class<I> cl) {
@@ -114,13 +115,13 @@ public class EjbSupportBeanArchiveBuilder extends BeanArchiveBuilder {
 
         @Override
         public String getEjbName() {
-            if (isStateless() && !clazz.getAnnotation(Stateless.class).name().isBlank()) {
+            if (isStateless() && !clazz.getAnnotation(Stateless.class).name().trim().isEmpty()) {
                 return clazz.getAnnotation(Stateless.class).name();
             }
-            if (isSingleton() && !clazz.getAnnotation(Singleton.class).name().isBlank()) {
+            if (isSingleton() && !clazz.getAnnotation(Singleton.class).name().trim().isEmpty()) {
                 return clazz.getAnnotation(Singleton.class).name();
             }
-            if (isStateful() && !clazz.getAnnotation(Stateful.class).name().isBlank()) {
+            if (isStateful() && !clazz.getAnnotation(Stateful.class).name().trim().isEmpty()) {
                 return clazz.getAnnotation(Stateful.class).name();
             }
             return clazz.getSimpleName();

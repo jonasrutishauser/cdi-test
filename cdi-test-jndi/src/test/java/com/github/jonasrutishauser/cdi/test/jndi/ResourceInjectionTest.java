@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.h2.Driver;
@@ -13,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.annotation.Resource;
 
 @ExtendWith(CdiTestJunitExtension.class)
 @EnvEntry(name = "env/string", value = "foo-bar")

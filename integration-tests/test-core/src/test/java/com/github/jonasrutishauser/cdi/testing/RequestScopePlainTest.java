@@ -2,10 +2,10 @@ package com.github.jonasrutishauser.cdi.testing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import jakarta.inject.Inject;
 
 class RequestScopePlainTest extends BaseTest {
 

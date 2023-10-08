@@ -1,6 +1,6 @@
 package com.github.jonasrutishauser.cdi.test.core.interceptor;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class MockImplementationManager {

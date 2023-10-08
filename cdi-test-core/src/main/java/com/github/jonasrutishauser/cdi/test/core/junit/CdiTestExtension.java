@@ -27,23 +27,23 @@ import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 import com.github.jonasrutishauser.cdi.test.core.context.TestContext;
 import com.github.jonasrutishauser.cdi.test.core.interceptor.ReplaceableStereotype;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.BeforeDestroyed;
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.spi.AfterBeanDiscovery;
-import jakarta.enterprise.inject.spi.AfterTypeDiscovery;
-import jakarta.enterprise.inject.spi.AnnotatedField;
-import jakarta.enterprise.inject.spi.AnnotatedMethod;
-import jakarta.enterprise.inject.spi.AnnotatedType;
-import jakarta.enterprise.inject.spi.Bean;
-import jakarta.enterprise.inject.spi.Extension;
-import jakarta.enterprise.inject.spi.ProcessAnnotatedType;
-import jakarta.enterprise.inject.spi.ProcessBeanAttributes;
-import jakarta.enterprise.inject.spi.WithAnnotations;
-import jakarta.enterprise.inject.spi.configurator.AnnotatedMethodConfigurator;
-import jakarta.enterprise.inject.spi.configurator.AnnotatedTypeConfigurator;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.BeforeDestroyed;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AfterTypeDiscovery;
+import javax.enterprise.inject.spi.AnnotatedField;
+import javax.enterprise.inject.spi.AnnotatedMethod;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.ProcessBeanAttributes;
+import javax.enterprise.inject.spi.WithAnnotations;
+import javax.enterprise.inject.spi.configurator.AnnotatedMethodConfigurator;
+import javax.enterprise.inject.spi.configurator.AnnotatedTypeConfigurator;
 
 public class CdiTestExtension implements Extension {
 
@@ -67,7 +67,7 @@ public class CdiTestExtension implements Extension {
                 try (BufferedReader reader = new BufferedReader(
                         new InputStreamReader(resources.nextElement().openStream()))) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                        if (!line.isBlank() && !line.trim().startsWith("#")) {
+                        if (!line.trim().isEmpty() && !line.trim().startsWith("#")) {
                             result.add(line.trim());
                         }
                     }

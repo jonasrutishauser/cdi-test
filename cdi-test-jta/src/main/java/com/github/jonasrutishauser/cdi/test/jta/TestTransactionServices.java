@@ -6,18 +6,17 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import javax.transaction.RollbackException;
+import javax.transaction.Status;
+import javax.transaction.Synchronization;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import org.jboss.logging.Logger;
 import org.jboss.weld.transaction.spi.TransactionServices;
 
 import com.arjuna.ats.jta.TransactionManager;
 import com.arjuna.ats.jta.common.jtaPropertyManager;
-
-import jakarta.transaction.RollbackException;
-import jakarta.transaction.Status;
-import jakarta.transaction.Synchronization;
-import jakarta.transaction.SystemException;
-import jakarta.transaction.UserTransaction;
 
 /**
  * SPI extension point of the Weld for integrate with transaction manager. If

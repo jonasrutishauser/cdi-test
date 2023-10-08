@@ -1,6 +1,6 @@
 package com.github.jonasrutishauser.cdi.test.core.junit;
 
-import static jakarta.enterprise.inject.spi.InterceptionType.AROUND_INVOKE;
+import static javax.enterprise.inject.spi.InterceptionType.AROUND_INVOKE;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -15,12 +15,12 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
 import org.junit.jupiter.api.function.Executable;
 
-import jakarta.enterprise.context.spi.CreationalContext;
-import jakarta.enterprise.inject.spi.AnnotatedMethod;
-import jakarta.enterprise.inject.spi.AnnotatedType;
-import jakarta.enterprise.inject.spi.BeanManager;
-import jakarta.enterprise.inject.spi.InjectionTarget;
-import jakarta.enterprise.inject.spi.Interceptor;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.AnnotatedMethod;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.inject.spi.Interceptor;
 
 class CdiTestMethodInterceptor<T> implements TestMethodInterceptor, CloseableResource {
     private final BeanManager beanManager;

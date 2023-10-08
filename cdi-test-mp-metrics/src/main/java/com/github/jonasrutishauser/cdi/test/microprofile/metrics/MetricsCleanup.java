@@ -3,6 +3,14 @@ package com.github.jonasrutishauser.cdi.test.microprofile.metrics;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.LongAdder;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Destroyed;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
+
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.Metric;
 import org.eclipse.microprofile.metrics.MetricRegistry;
@@ -17,13 +25,6 @@ import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
 import io.smallrye.metrics.app.CounterImpl;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Destroyed;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.Any;
-import jakarta.enterprise.inject.spi.AnnotatedType;
-import jakarta.enterprise.inject.spi.BeanManager;
-import jakarta.inject.Inject;
 
 @ApplicationScoped
 class MetricsCleanup {

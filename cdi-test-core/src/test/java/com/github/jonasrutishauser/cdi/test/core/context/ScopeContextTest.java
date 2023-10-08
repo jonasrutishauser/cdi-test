@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,10 +27,6 @@ import com.github.jonasrutishauser.cdi.test.core.context.beans.ScopedBean;
 import com.github.jonasrutishauser.cdi.test.core.context.beans.SessionScopedBean;
 import com.github.jonasrutishauser.cdi.test.core.context.beans.TestScopedBean;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.enterprise.inject.Any;
-import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class ScopeContextTest {

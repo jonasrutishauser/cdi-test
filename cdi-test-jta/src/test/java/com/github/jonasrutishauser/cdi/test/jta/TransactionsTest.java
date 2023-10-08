@@ -1,22 +1,22 @@
 package com.github.jonasrutishauser.cdi.test.jta;
 
-import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import javax.inject.Inject;
+import javax.transaction.Status;
+import javax.transaction.TransactionSynchronizationRegistry;
+import javax.transaction.Transactional;
+import javax.transaction.TransactionalException;
+import javax.transaction.UserTransaction;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.inject.Inject;
-import jakarta.transaction.Status;
-import jakarta.transaction.TransactionSynchronizationRegistry;
-import jakarta.transaction.Transactional;
-import jakarta.transaction.TransactionalException;
-import jakarta.transaction.UserTransaction;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class TransactionsTest {

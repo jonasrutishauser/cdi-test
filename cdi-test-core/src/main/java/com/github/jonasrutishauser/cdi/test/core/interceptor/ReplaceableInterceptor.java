@@ -1,6 +1,6 @@
 package com.github.jonasrutishauser.cdi.test.core.interceptor;
 
-import static jakarta.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
+import static javax.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
 import static java.util.Collections.emptySet;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,15 +12,15 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestExtension;
 
-import jakarta.annotation.Priority;
-import jakarta.enterprise.inject.Any;
-import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.Intercepted;
-import jakarta.enterprise.inject.spi.Bean;
-import jakarta.inject.Inject;
-import jakarta.interceptor.AroundInvoke;
-import jakarta.interceptor.Interceptor;
-import jakarta.interceptor.InvocationContext;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Intercepted;
+import javax.enterprise.inject.spi.Bean;
+import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
 
 @Replaceable
 @Interceptor

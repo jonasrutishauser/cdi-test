@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.testing;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import jakarta.inject.Inject;
 
 class DependentScopedBeanTest extends BaseTest {
 

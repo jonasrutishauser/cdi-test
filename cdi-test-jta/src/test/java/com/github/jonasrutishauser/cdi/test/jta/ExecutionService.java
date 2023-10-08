@@ -1,10 +1,10 @@
 package com.github.jonasrutishauser.cdi.test.jta;
 
+import javax.enterprise.context.Dependent;
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.function.ThrowingSupplier;
-
-import jakarta.enterprise.context.Dependent;
-import jakarta.transaction.Transactional;
 
 @Dependent
 public class ExecutionService {

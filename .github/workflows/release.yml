@@ -57,7 +57,7 @@ jobs:
       - name: Create Release Entry
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.release.outputs.RELEASED_VERSION }}
+          tag_name: javax/v${{ steps.release.outputs.RELEASED_VERSION }}
           name: CDI Test ${{ steps.release.outputs.RELEASED_VERSION }}
           body: ${{ github.event.inputs.release-body }}
           token: ${{ github.token }}

@@ -7,19 +7,21 @@
 		<version>19</version>
 	</parent>
 
+	<groupId>com.github.jonasrutishauser.javax</groupId>
 	<artifactId>cdi-test</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>${url}</url>
 	<name>CDI Test</name>
-	<description>JUnit 5 extension for easy and efficient testing of CDI
-		components</description>
+	<description>JUnit 5 extension for easy and efficient testing of CDI components</description>
 
 	<properties>
 		<root.artifactId>cdi-test</root.artifactId>
+		<sonar.projectKey>com.github.jonasrutishauser:${project.artifactId}</sonar.projectKey>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencyManagement>
@@ -34,30 +36,33 @@
 			<dependency>
 				<groupId>jakarta.platform</groupId>
 				<artifactId>jakarta.jakartaee-bom</artifactId>
-				<version>9.1.0</version>
+				<version>8.0.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.weld</groupId>
 				<artifactId>weld-core-bom</artifactId>
-				<version>4.0.3.Final</version>
+				<version>3.1.9.Final</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-bom</artifactId>
-				<version>5.4.0</version>
+				<version>4.11.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.jboss.narayana</groupId>
-				<artifactId>narayana-bom</artifactId>
-				<version>7.0.0.Final</version>
-				<type>pom</type>
-				<scope>import</scope>
+            	<groupId>org.jboss.narayana.jta</groupId>
+            	<artifactId>cdi</artifactId>
+				<version>5.12.7.Final</version>
+			</dependency>
+			<dependency>
+            	<groupId>org.jboss.narayana.jta</groupId>
+            	<artifactId>narayana-jta</artifactId>
+				<version>5.12.7.Final</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -74,6 +79,32 @@
 		<module>integration-tests</module>
 		<module>cdi-test-mp-metrics</module>
 	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+					<configuration>
+						<goals>deploy</goals><!-- do not generate a site -->
+						<tagNameFormat>javax/v@{project.version}</tagNameFormat>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>java-greater-than-8</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.release>8</maven.compiler.release>
+			</properties>
+		</profile>
+	</profiles>
 
 	<scm>
 		<connection>${scm.connection}</connection>

@@ -10,11 +10,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
-import jakarta.enterprise.context.ContextNotActiveException;
-import jakarta.enterprise.context.spi.AlterableContext;
-import jakarta.enterprise.context.spi.Contextual;
-import jakarta.enterprise.context.spi.CreationalContext;
-import jakarta.enterprise.inject.spi.Bean;
+import javax.enterprise.context.ContextNotActiveException;
+import javax.enterprise.context.spi.AlterableContext;
+import javax.enterprise.context.spi.Contextual;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
 
 public class TestContext implements AlterableContext {
 

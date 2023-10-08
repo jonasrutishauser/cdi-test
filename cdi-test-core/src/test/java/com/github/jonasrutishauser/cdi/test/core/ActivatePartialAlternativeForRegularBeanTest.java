@@ -1,5 +1,7 @@
 package com.github.jonasrutishauser.cdi.test.core;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,8 +10,6 @@ import com.github.jonasrutishauser.cdi.test.core.beans.Person;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
 import com.github.jonasrutishauser.cdi.test.core.service.BackendServiceTestPartialImplementation;
 import com.github.jonasrutishauser.cdi.test.core.service.SampleService;
-
-import jakarta.inject.Inject;
 
 /**
  * Demo and test for the probably partly exotic case of an only partially

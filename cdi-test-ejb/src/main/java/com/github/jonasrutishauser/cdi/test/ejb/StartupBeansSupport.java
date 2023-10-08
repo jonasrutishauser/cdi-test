@@ -1,12 +1,12 @@
 package com.github.jonasrutishauser.cdi.test.ejb;
 
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.spi.Bean;
-import jakarta.enterprise.inject.spi.BeanManager;
 
 @TestScoped
 public class StartupBeansSupport {

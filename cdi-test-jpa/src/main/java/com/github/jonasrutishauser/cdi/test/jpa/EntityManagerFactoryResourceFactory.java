@@ -1,11 +1,11 @@
 package com.github.jonasrutishauser.cdi.test.jpa;
 
+import javax.enterprise.inject.spi.CDI;
+import javax.persistence.EntityManagerFactory;
+
 import org.jboss.logging.Logger;
 import org.jboss.weld.injection.spi.ResourceReference;
 import org.jboss.weld.injection.spi.ResourceReferenceFactory;
-
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.persistence.EntityManagerFactory;
 
 public class EntityManagerFactoryResourceFactory implements ResourceReferenceFactory<EntityManagerFactory> {
     private static final Logger LOG = Logger.getLogger(EntityManagerFactoryResourceFactory.class);
@@ -22,7 +22,7 @@ public class EntityManagerFactoryResourceFactory implements ResourceReferenceFac
         if (testEntityResources == null) {
             testEntityResources = CDI.current().select(TestEntityResources.class).get();
         }
-        return new ResourceReference<>() {
+        return new ResourceReference<EntityManagerFactory>() {
             EntityManagerFactory emf;
 
             @Override

@@ -1,14 +1,14 @@
 package com.github.jonasrutishauser.cdi.test.jta;
 
+import javax.enterprise.context.BeforeDestroyed;
+import javax.enterprise.event.Observes;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
 import org.jboss.logging.Logger;
 
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.enterprise.context.BeforeDestroyed;
-import jakarta.enterprise.event.Observes;
-import jakarta.transaction.Status;
-import jakarta.transaction.SystemException;
-import jakarta.transaction.UserTransaction;
 
 @TestScoped
 class TransactionCloser {

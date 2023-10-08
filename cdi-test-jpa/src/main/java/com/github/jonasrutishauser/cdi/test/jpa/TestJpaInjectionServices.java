@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceProperty;
+import javax.persistence.PersistenceUnit;
+
 import org.jboss.weld.injection.spi.JpaInjectionServices;
 import org.jboss.weld.injection.spi.ResourceReferenceFactory;
-
-import jakarta.enterprise.inject.spi.InjectionPoint;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceProperty;
-import jakarta.persistence.PersistenceUnit;
 
 public class TestJpaInjectionServices implements JpaInjectionServices {
     public static final String DEFAULT_TEST_PERSISTENCE_UNIT = "cdi-test";
@@ -25,7 +25,7 @@ public class TestJpaInjectionServices implements JpaInjectionServices {
             throw new IllegalStateException(
                     "no @PersistenceContext annotation found on injection point " + injectionPoint);
         }
-        String persistenceUnit = persistenceContext.unitName().isBlank() ? DEFAULT_TEST_PERSISTENCE_UNIT
+        String persistenceUnit = persistenceContext.unitName().trim().isEmpty() ? DEFAULT_TEST_PERSISTENCE_UNIT
                 : persistenceContext.unitName();
         TestEntityResources.addAdditionalProperties(persistenceUnit, convert(persistenceContext.properties()));
         return new EntityManagerResourceFactory(persistenceUnit);
@@ -45,7 +45,7 @@ public class TestJpaInjectionServices implements JpaInjectionServices {
                     "no @PersistenceUnit annotation found on injection point " + injectionPoint);
         }
         return new EntityManagerFactoryResourceFactory(
-                persistenceUnit.unitName().isBlank() ? DEFAULT_TEST_PERSISTENCE_UNIT : persistenceUnit.unitName());
+                persistenceUnit.unitName().trim().isEmpty() ? DEFAULT_TEST_PERSISTENCE_UNIT : persistenceUnit.unitName());
     }
 
     @Override

@@ -9,14 +9,14 @@ import org.jboss.weld.context.bound.MutableBoundRequest;
 import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.BeforeDestroyed;
-import jakarta.enterprise.context.Destroyed;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.context.control.RequestContextController;
-import jakarta.enterprise.event.Event;
-import jakarta.enterprise.inject.spi.BeanManager;
-import jakarta.inject.Inject;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.BeforeDestroyed;
+import javax.enterprise.context.Destroyed;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.context.control.RequestContextController;
+import javax.enterprise.event.Event;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
 
 @ApplicationScoped
 public class ContextControl {

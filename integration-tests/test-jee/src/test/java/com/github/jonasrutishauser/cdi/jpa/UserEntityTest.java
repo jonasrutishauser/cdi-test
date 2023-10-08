@@ -2,18 +2,18 @@ package com.github.jonasrutishauser.cdi.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.PersistenceProperty;
+import javax.transaction.UserTransaction;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.PersistenceProperty;
-import jakarta.transaction.UserTransaction;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class UserEntityTest {

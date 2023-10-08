@@ -3,8 +3,10 @@ package com.github.jonasrutishauser.cdi.test.core.context;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.lang.annotation.Annotation;
 import java.util.UUID;
+
+import javax.enterprise.context.control.RequestContextController;
+import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,12 +18,6 @@ import com.github.jonasrutishauser.cdi.test.core.context.beans.RequestScopedBean
 import com.github.jonasrutishauser.cdi.test.core.context.beans.ScopedBean;
 import com.github.jonasrutishauser.cdi.test.core.context.beans.SessionScopedBean;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.enterprise.context.control.RequestContextController;
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class ContextControlTest {

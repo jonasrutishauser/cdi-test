@@ -1,10 +1,10 @@
 package com.github.jonasrutishauser.cdi.jpa;
 
-import jakarta.enterprise.context.Dependent;
-import jakarta.inject.Inject;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreRemove;
-import jakarta.persistence.PreUpdate;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 
 @Dependent
 public class CounterEntityListener {

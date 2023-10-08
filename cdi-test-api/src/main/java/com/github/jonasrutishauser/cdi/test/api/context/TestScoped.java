@@ -10,9 +10,9 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import jakarta.enterprise.context.NormalScope;
-import jakarta.enterprise.util.AnnotationLiteral;
-import jakarta.inject.Scope;
+import javax.enterprise.context.NormalScope;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Scope;
 
 @Scope
 @NormalScope

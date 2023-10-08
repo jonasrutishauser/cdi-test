@@ -4,16 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
+import javax.ejb.Startup;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessSessionBean;
+import javax.enterprise.inject.spi.SessionBeanType;
 
-import jakarta.ejb.Startup;
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.spi.AfterBeanDiscovery;
-import jakarta.enterprise.inject.spi.AnnotatedType;
-import jakarta.enterprise.inject.spi.Extension;
-import jakarta.enterprise.inject.spi.ProcessSessionBean;
-import jakarta.enterprise.inject.spi.SessionBeanType;
+import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
 public class EjbExtension implements Extension {
 

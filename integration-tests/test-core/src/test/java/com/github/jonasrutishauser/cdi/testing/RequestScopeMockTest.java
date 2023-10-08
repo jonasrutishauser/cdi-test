@@ -2,10 +2,10 @@ package com.github.jonasrutishauser.cdi.testing;
 
 import static org.mockito.Mockito.verify;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-
-import jakarta.inject.Inject;
 
 class RequestScopeMockTest extends BaseTest {
 

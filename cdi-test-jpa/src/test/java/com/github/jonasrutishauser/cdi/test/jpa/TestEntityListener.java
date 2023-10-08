@@ -1,9 +1,9 @@
 package com.github.jonasrutishauser.cdi.test.jpa;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreRemove;
-import jakarta.persistence.PreUpdate;
+import javax.inject.Inject;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 
 public class TestEntityListener {
     @Inject

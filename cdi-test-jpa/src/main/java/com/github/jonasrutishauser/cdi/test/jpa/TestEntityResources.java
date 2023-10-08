@@ -8,19 +8,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.persistence.transaction.JTA11TransactionController;
+import javax.annotation.PreDestroy;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.eclipse.persistence.transaction.JTATransactionController;
 
 import com.arjuna.ats.jta.TransactionManager;
-import com.arjuna.ats.jta.common.jtaPropertyManager;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
-
-import jakarta.annotation.PreDestroy;
-import jakarta.enterprise.inject.spi.BeanManager;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 @TestScoped
 public class TestEntityResources {
@@ -71,7 +69,7 @@ public class TestEntityResources {
         Map<String, Object> properties = new HashMap<>();
         properties.putAll(additionalProperties.getOrDefault(persistenceUnit, emptyMap()));
         properties.put(CDI_BEANMANAGER, beanManager);
-        properties.put(TARGET_SERVER, "org.eclipse.persistence.transaction.JTA11TransactionController");
+        properties.put(TARGET_SERVER, "org.eclipse.persistence.transaction.JTATransactionController");
         return Persistence.createEntityManagerFactory(persistenceUnit, properties);
     }
 
@@ -86,8 +84,6 @@ public class TestEntityResources {
     private static class EclipselinkSupport {
         private static void install() {
             JTATransactionController.setDefaultTransactionManager(TransactionManager.transactionManager());
-            JTA11TransactionController.setDefaultTransactionSynchronizationRegistry(
-                    jtaPropertyManager.getJTAEnvironmentBean().getTransactionSynchronizationRegistry());
         }
     }
 }

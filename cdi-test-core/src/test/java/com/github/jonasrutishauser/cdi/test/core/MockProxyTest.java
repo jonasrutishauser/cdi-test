@@ -2,6 +2,8 @@ package com.github.jonasrutishauser.cdi.test.core;
 
 import static org.mockito.Mockito.verify;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +14,6 @@ import com.github.jonasrutishauser.cdi.test.core.beans.Person;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
 import com.github.jonasrutishauser.cdi.test.core.service.BackendService;
 import com.github.jonasrutishauser.cdi.test.core.service.SampleService;
-
-import jakarta.inject.Inject;
 
 /**
  * Show mock injection using test method arguments as supported by the Mockito

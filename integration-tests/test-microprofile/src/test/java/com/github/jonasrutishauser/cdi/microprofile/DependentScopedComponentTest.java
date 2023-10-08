@@ -2,13 +2,13 @@ package com.github.jonasrutishauser.cdi.microprofile;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
 import com.github.jonasrutishauser.cdi.test.microprofile.config.ConfigPropertyValue;
-
-import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 class DependentScopedComponentTest {
