@@ -58,6 +58,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: javax/v${{ steps.release.outputs.RELEASED_VERSION }}
-          name: CDI Test ${{ steps.release.outputs.RELEASED_VERSION }}
+          name: CDI Test ${{ steps.release.outputs.RELEASED_VERSION }} (javax)
           body: ${{ github.event.inputs.release-body }}
           token: ${{ github.token }}
