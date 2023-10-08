@@ -5,7 +5,7 @@ A JUnit 5 extension for easy and efficient testing of CDI components.
 [![GNU Lesser General Public License, Version 3, 29 June 2007](https://img.shields.io/github/license/jonasrutishauser/cdi-test.svg?label=License)](http://www.gnu.org/licenses/lgpl-3.0.txt)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jonasrutishauser/cdi-test-api.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.jonasrutishauser%22%20a%3A%22cdi-test-api%22)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/jonasrutishauser/cdi-test/ci.yml.svg?label=Build)](https://github.com/jonasrutishauser/cdi-test/actions)
-[![Coverage](https://img.shields.io/codecov/c/github/jonasrutishauser/cdi-test/master.svg?label=Coverage)](https://codecov.io/gh/jonasrutishauser/cdi-test)
+[![Coverage](https://img.shields.io/codecov/c/gh/jonasrutishauser/cdi-test/master.svg?label=Coverage)](https://codecov.io/gh/jonasrutishauser/cdi-test)
 
 ## Reimplementation of [guhilling/cdi-test](https://github.com/guhilling/cdi-test/)
 This is more or less a reimplementation of [guhilling/cdi-test](https://github.com/guhilling/cdi-test/) with some small differences:
