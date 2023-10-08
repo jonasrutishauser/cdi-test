@@ -9,7 +9,7 @@
 
 	<groupId>com.github.jonasrutishauser.javax</groupId>
 	<artifactId>cdi-test</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>${url}</url>
@@ -110,7 +110,7 @@
 		<connection>${scm.connection}</connection>
 		<developerConnection>${scm.developerConnection}</developerConnection>
 		<url>${scm_url}</url>
-		<tag>javax/v1.0.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
