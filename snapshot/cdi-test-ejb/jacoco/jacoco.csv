@@ -1,12 +1,12 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,TestEjbInjectionServices.new ResourceReference() {...},0,20,0,0,0,3,0,3,0,3
-CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,TestEjbInjectionServices,0,14,0,0,0,3,0,4,0,4
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,StartupBeansSupport,0,32,0,0,0,7,0,3,0,3
+CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,TestEjbInjectionServices,0,14,0,0,0,3,0,4,0,4
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbSupportBeanArchiveBuilder,3,41,1,1,0,9,1,3,0,3
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbExtension,37,127,4,8,5,20,3,8,0,5
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbSupportBeanArchiveBuilder.new WeldBeanDeploymentArchive() {...},0,70,2,10,0,14,2,7,0,3
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbFileSystemBeanArchiveHandler,0,10,0,0,0,2,0,2,0,2
-CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,TestEjbServices.new SessionObjectReference() {...},1,19,0,0,1,3,1,3,1,3
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,TestEjbServices,1,9,0,0,1,3,1,3,1,3
-CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbSupportBeanArchiveBuilder.EjbDescriptorImpl,61,99,11,11,8,23,10,14,1,12
+CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,TestEjbServices.new SessionObjectReference() {...},1,19,0,0,1,3,1,3,1,3
 CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbInstance.Literal,0,5,0,0,0,1,0,1,0,1
+CDI Test EJB,com.github.jonasrutishauser.cdi.test.ejb,EjbSupportBeanArchiveBuilder.EjbDescriptorImpl,61,99,11,11,8,23,10,14,1,12
