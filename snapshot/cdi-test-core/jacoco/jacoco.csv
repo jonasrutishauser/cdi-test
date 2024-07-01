@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.interceptor,MockitoImplementationManager,6,38,1,1,1,11,1,5,0,5
-CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.interceptor,ReplaceableInterceptor,9,145,2,12,1,30,2,12,0,7
+CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.interceptor,ReplaceableInterceptor,0,172,0,10,0,33,0,15,0,10
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.interceptor,TestImplementationManager,0,19,0,0,0,5,0,3,0,3
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.interceptor,MockImplementationManager,0,5,0,0,0,2,0,2,0,2
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestExtension,48,404,15,35,7,73,14,28,1,16

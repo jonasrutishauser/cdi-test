@@ -14,7 +14,7 @@
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> jakarta.inject.Inject;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   @Dependent
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="BackendService" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/service/BackendService.html#BackendService">BackendService</a> {
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="BackendService" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/service/BackendService.html#BackendService">BackendService</a> <strong class="jxr_keyword">implements</strong> <a name="Service" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/service/Service.html#Service">Service</a> {
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>      @Inject
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>      <strong class="jxr_keyword">private</strong> <a name="OverriddenService" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/service/OverriddenService.html#OverriddenService">OverriddenService</a> sampleService;
@@ -23,15 +23,16 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>      @Inject
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <a name="OverriddenService" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/service/OverriddenService.html#OverriddenService">OverriddenService</a> qualifiedSampleService;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">public</strong> String storePerson(<a name="Person" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/beans/Person.html#Person">Person</a> person) {
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>          <strong class="jxr_keyword">return</strong> sampleService.serviceMethod();
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>      }
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>      <strong class="jxr_keyword">public</strong> String storePersonQualified(<a name="Person" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/beans/Person.html#Person">Person</a> person) {
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>          <strong class="jxr_keyword">return</strong> qualifiedSampleService.serviceMethod();
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>      }
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  }
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>      @Override
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>      <strong class="jxr_keyword">public</strong> String storePerson(<a name="Person" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/beans/Person.html#Person">Person</a> person) {
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>          <strong class="jxr_keyword">return</strong> sampleService.serviceMethod();
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>      }
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <strong class="jxr_keyword">public</strong> String storePersonQualified(<a name="Person" href="../../../../../../../com/github/jonasrutishauser/cdi/test/core/beans/Person.html#Person">Person</a> person) {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>          <strong class="jxr_keyword">return</strong> qualifiedSampleService.serviceMethod();
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      }
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2024. All rights reserved.</div>
