@@ -5,10 +5,13 @@ import static java.util.Collections.emptySet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
 
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestExtension;
 
@@ -60,13 +63,16 @@ public class ReplaceableInterceptor {
     }
 
     private Object getMock(Class<?> declaringClass) {
-        for (Class<?> clazz = targetClass; clazz != null; clazz = clazz.getSuperclass()) {
-            Object mock = mockImplementationManager.getMock(clazz);
-            if (mock != null || declaringClass.equals(clazz)) {
-                return mock;
-            }
-        }
-        return mockImplementationManager.getMock(declaringClass);
+        return Stream.<Class<?>>iterate(targetClass, clazz -> clazz.getSuperclass() != null, Class::getSuperclass) //
+                .flatMap(this::getSelfAndInterfaces) //
+                .map(mockImplementationManager::getMock) //
+                .filter(Objects::nonNull) //
+                .findFirst() //
+                .orElseGet(() -> mockImplementationManager.getMock(declaringClass));
+    }
+
+    private Stream<Class<?>> getSelfAndInterfaces(Class<?> clazz) {
+        return Stream.concat(Stream.of(clazz), Arrays.stream(clazz.getInterfaces()).flatMap(this::getSelfAndInterfaces));
     }
 
     private Object callAlternative(InvocationContext ctx, Object alternative) throws Throwable {

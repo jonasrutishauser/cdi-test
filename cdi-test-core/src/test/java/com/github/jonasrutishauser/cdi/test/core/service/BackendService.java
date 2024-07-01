@@ -6,7 +6,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 
 @Dependent
-public class BackendService {
+public class BackendService implements Service {
 
     @Inject
     private OverriddenService sampleService;
@@ -15,6 +15,7 @@ public class BackendService {
     @Inject
     private OverriddenService qualifiedSampleService;
 
+    @Override
     public String storePerson(Person person) {
         return sampleService.serviceMethod();
     }

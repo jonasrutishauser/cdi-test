@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.jonasrutishauser.cdi.test.core.beans.Person;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
-import com.github.jonasrutishauser.cdi.test.core.service.BackendService;
 import com.github.jonasrutishauser.cdi.test.core.service.SampleService;
+import com.github.jonasrutishauser.cdi.test.core.service.Service;
 
 import jakarta.inject.Inject;
 
@@ -28,7 +28,7 @@ class MockProxyTest {
     private SampleService sampleService;
 
     @Test
-    void createPersonWithMockBackend(@Mock BackendService backendService) {
+    void createPersonWithMockBackend(@Mock Service backendService) {
         Person person = new Person();
         sampleService.storePerson(person);
         verify(backendService).storePerson(person);
