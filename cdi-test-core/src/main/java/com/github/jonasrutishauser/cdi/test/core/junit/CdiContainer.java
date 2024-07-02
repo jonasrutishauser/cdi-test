@@ -80,6 +80,8 @@ class CdiContainer implements CloseableResource {
         LOGGER.info("Booting CDI container");
         long start = System.currentTimeMillis();
         weld.addExtension(new CdiTestExtension(testInfo));
+        SecurityServicesImpl securityServices = new SecurityServicesImpl();
+        weld.addServices(securityServices);
         addBeans();
         weldContainer = weld.initialize();
         long end = System.currentTimeMillis();
@@ -87,6 +89,7 @@ class CdiContainer implements CloseableResource {
         if (!weldContainer.isRunning()) {
             throw new IllegalStateException("Failed to start CDI container");
         }
+        securityServices.setTestInfo(weldContainer.select(TestInfo.class).get());
     }
 
     private void addBeans() {

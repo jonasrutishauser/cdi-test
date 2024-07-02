@@ -3,6 +3,8 @@ package com.github.jonasrutishauser.cdi.test.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.security.Principal;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,11 +41,15 @@ class InjectionTest {
     @Inject
     private Person customPerson;
 
+    @Inject
+    private Principal principal;
+
     @Test
     void injection() {
         assertNotNull(person);
         assertNotNull(constructorInjected);
         assertNotNull(customPerson);
+        assertNotNull(principal);
     }
 
     @Test
@@ -77,6 +83,11 @@ class InjectionTest {
     void qualifierInjectionWorkingOnTestCase() {
         assertEquals("OverridingServiceImpl", sampleService.serviceMethod());
         assertEquals("QualifiedOverriddenServiceImpl", qualifiedSampleService.serviceMethod());
+    }
+
+    @Test
+    void principal() {
+        assertEquals("principal()", principal.getName());
     }
 
     private void checkPersonWorks(Person person) {
