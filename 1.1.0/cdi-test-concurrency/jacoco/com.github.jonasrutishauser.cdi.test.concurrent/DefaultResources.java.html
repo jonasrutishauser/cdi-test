@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultResources.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test Concurrency</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.concurrent</a> &gt; <span class="el_source">DefaultResources.java</span></div><h1>DefaultResources.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.concurrent;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
+import org.glassfish.enterprise.concurrent.AbstractManagedExecutorService.RejectPolicy;
+import org.glassfish.enterprise.concurrent.ManagedScheduledExecutorServiceImpl;
+import org.glassfish.enterprise.concurrent.ManagedThreadFactoryImpl;
+
+import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
+
+import jakarta.enterprise.concurrent.ManagedScheduledExecutorService;
+import jakarta.enterprise.concurrent.ManagedThreadFactory;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Disposes;
+import jakarta.enterprise.inject.Produces;
+
+@ApplicationScoped
+<span class="fc" id="L18">class DefaultResources {</span>
+
+    @Produces
+    @TestScoped
+    ManagedScheduledExecutorService createDefaultService() {
+<span class="fc" id="L23">        return new ManagedScheduledExecutorServiceImpl(&quot;default&quot;, null, 0, false, 10, 0, SECONDS, 0, null,</span>
+                RejectPolicy.ABORT);
+    }
+
+    void stopDefaultService(@Disposes ManagedScheduledExecutorService executorService) {
+<span class="fc" id="L28">        executorService.shutdownNow();</span>
+<span class="fc" id="L29">    }</span>
+
+    @Produces
+    @TestScoped
+    ManagedThreadFactory createThreadFactory() {
+<span class="nc" id="L34">        return new ManagedThreadFactoryImpl(&quot;default&quot;);</span>
+    }
+
+    void stopDefaultService(@Disposes ManagedThreadFactory threadFactory) {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (threadFactory instanceof ManagedThreadFactoryImpl) {</span>
+<span class="nc" id="L39">            ((ManagedThreadFactoryImpl) threadFactory).stop();</span>
+        }
+<span class="nc" id="L41">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
