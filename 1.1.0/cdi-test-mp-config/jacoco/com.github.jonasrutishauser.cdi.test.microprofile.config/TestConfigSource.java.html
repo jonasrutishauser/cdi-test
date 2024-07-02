@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestConfigSource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test microprofile config</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.microprofile.config</a> &gt; <span class="el_source">TestConfigSource.java</span></div><h1>TestConfigSource.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.microprofile.config;
+
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.microprofile.config.spi.ConfigSource;
+
+import jakarta.enterprise.inject.spi.CDI;
+
+<span class="fc" id="L10">public class TestConfigSource implements ConfigSource {</span>
+
+<span class="fc" id="L12">    private final TestProperties testProperties = CDI.current().select(TestProperties.class).get();</span>
+
+    @Override
+    public Map&lt;String, String&gt; getProperties() {
+<span class="fc" id="L16">        return testProperties.getProperties();</span>
+    }
+
+    @Override
+    public Set&lt;String&gt; getPropertyNames() {
+<span class="fc" id="L21">        return getProperties().keySet();</span>
+    }
+
+    @Override
+    public String getValue(String propertyName) {
+<span class="fc bfc" id="L26" title="All 4 branches covered.">        if (!propertyName.startsWith(&quot;smallrye.&quot;) &amp;&amp; !propertyName.startsWith(&quot;mp.config.&quot;)</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">                &amp;&amp; !testProperties.isInitialized()) {</span>
+            // avoid property validation warnings
+            // (may result in runtime errors, but that is ok for tests)
+<span class="fc" id="L30">            return &quot;0&quot;;</span>
+        }
+<span class="fc" id="L32">        return getProperties().get(propertyName);</span>
+    }
+
+    @Override
+    public int getOrdinal() {
+<span class="fc" id="L37">        return 5000;</span>
+    }
+
+    @Override
+    public String getName() {
+<span class="fc" id="L42">        return &quot;cdi-test-configuration&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
