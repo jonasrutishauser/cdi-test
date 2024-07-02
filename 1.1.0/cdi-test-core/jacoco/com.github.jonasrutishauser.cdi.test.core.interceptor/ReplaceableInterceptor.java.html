@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReplaceableInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test Implementation</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.core.interceptor</a> &gt; <span class="el_source">ReplaceableInterceptor.java</span></div><h1>ReplaceableInterceptor.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.core.interceptor;
+
+import static jakarta.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
+import static java.util.Collections.emptySet;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
+
+import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestExtension;
+
+import jakarta.annotation.Priority;
+import jakarta.enterprise.inject.Any;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Intercepted;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.inject.Inject;
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.Interceptor;
+import jakarta.interceptor.InvocationContext;
+
+@Replaceable
+@Interceptor
+@Priority(LIBRARY_BEFORE)
+public class ReplaceableInterceptor {
+
+    private final TestImplementationManager testImplementationManager;
+    private final MockImplementationManager mockImplementationManager;
+    private final Class&lt;?&gt; targetClass;
+    private final Map&lt;Class&lt;?&gt;, Set&lt;Class&lt;?&gt;&gt;&gt; testImplementations;
+    private final Instance&lt;Object&gt; instance;
+<span class="fc" id="L38">    private final ConcurrentMap&lt;Class&lt;?&gt;, Object&gt; instances = new ConcurrentHashMap&lt;&gt;();</span>
+
+    @Inject
+    public ReplaceableInterceptor(TestImplementationManager testImplementationManager,
+            MockImplementationManager mockImplementationManager, CdiTestExtension extension,
+<span class="fc" id="L43">            @Intercepted Bean&lt;?&gt; targetBean, @Any Instance&lt;Object&gt; instance) {</span>
+<span class="fc" id="L44">        this.testImplementationManager = testImplementationManager;</span>
+<span class="fc" id="L45">        this.mockImplementationManager = mockImplementationManager;</span>
+<span class="fc" id="L46">        this.targetClass = targetBean.getBeanClass();</span>
+<span class="fc" id="L47">        this.testImplementations = extension.getTestImplementations(targetBean);</span>
+<span class="fc" id="L48">        this.instance = instance;</span>
+<span class="fc" id="L49">    }</span>
+
+    @AroundInvoke
+    public Object invokeReplaceable(InvocationContext ctx) throws Throwable {
+<span class="fc" id="L53">        Object mock = getMock(ctx.getMethod().getDeclaringClass());</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (mock != null) {</span>
+<span class="fc" id="L55">            return callAlternative(ctx, mock);</span>
+        }
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (Class&lt;?&gt; testImplementation : testImplementations.getOrDefault(ctx.getMethod().getDeclaringClass(), emptySet())) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (testImplementationManager.isEnabled(testImplementation)) {</span>
+<span class="fc" id="L59">                return callAlternative(ctx, getInstance(testImplementation));</span>
+            }
+<span class="fc" id="L61">        }</span>
+<span class="fc" id="L62">        return ctx.proceed();</span>
+    }
+
+    private Object getMock(Class&lt;?&gt; declaringClass) {
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        return Stream.&lt;Class&lt;?&gt;&gt;iterate(targetClass, clazz -&gt; clazz.getSuperclass() != null, Class::getSuperclass) //</span>
+<span class="fc" id="L67">                .flatMap(this::getSelfAndInterfaces) //</span>
+<span class="fc" id="L68">                .map(mockImplementationManager::getMock) //</span>
+<span class="fc" id="L69">                .filter(Objects::nonNull) //</span>
+<span class="fc" id="L70">                .findFirst() //</span>
+<span class="fc" id="L71">                .orElseGet(() -&gt; mockImplementationManager.getMock(declaringClass));</span>
+    }
+
+    private Stream&lt;Class&lt;?&gt;&gt; getSelfAndInterfaces(Class&lt;?&gt; clazz) {
+<span class="fc" id="L75">        return Stream.concat(Stream.of(clazz), Arrays.stream(clazz.getInterfaces()).flatMap(this::getSelfAndInterfaces));</span>
+    }
+
+    private Object callAlternative(InvocationContext ctx, Object alternative) throws Throwable {
+        try {
+<span class="fc" id="L80">            return getAlternativeMethod(ctx.getMethod(), alternative).invoke(alternative, ctx.getParameters());</span>
+<span class="fc" id="L81">        } catch (NoSuchMethodException e) {</span>
+<span class="fc" id="L82">            throw new IllegalStateException(</span>
+<span class="fc" id="L83">                    &quot;method &quot; + ctx.getMethod().getName() + &quot; not found on alternative &quot; + alternative);</span>
+<span class="fc" id="L84">        } catch (InvocationTargetException e) {</span>
+<span class="fc" id="L85">            throw e.getCause();</span>
+        }
+    }
+
+    private Method getAlternativeMethod(Method method, Object alternative) throws NoSuchMethodException {
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (method.getDeclaringClass().isAssignableFrom(alternative.getClass())) {</span>
+<span class="fc" id="L91">            return method;</span>
+        }
+<span class="fc" id="L93">        return alternative.getClass().getMethod(method.getName(), method.getParameterTypes());</span>
+    }
+
+    private Object getInstance(Class&lt;?&gt; testImplementation) {
+<span class="fc" id="L97">        return instances.computeIfAbsent(testImplementation, type -&gt; instance.select(type).get());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
