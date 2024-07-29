@@ -4,5 +4,5 @@ CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,TestEntityResources,5,102,
 CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,EntityManagerFactoryResourceFactory,27,0,2,0,7,0,4,0,3,0
 CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,EntityManagerResourceFactory.new ResourceReference() {...},0,23,0,0,0,4,0,3,0,3
 CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,EntityManagerFactoryResourceFactory.new ResourceReference() {...},27,0,0,0,6,0,3,0,3,0
-CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,EntityManagerResourceFactory,4,36,1,1,2,8,1,4,0,4
 CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,TestEntityResources.EclipselinkSupport,0,6,0,0,0,4,0,1,0,1
+CDI Test JPA,com.github.jonasrutishauser.cdi.test.jpa,EntityManagerResourceFactory,4,36,1,1,2,8,1,4,0,4
