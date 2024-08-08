@@ -43,7 +43,9 @@ class CdiContainer implements CloseableResource {
     }
 
     public void clearTest() {
-        contextControl().stop();
+        if (weldContainer != null) {
+            contextControl().stop();
+        }
     }
 
     public <T> TestMethodInterceptor inject(Object testInstance, Class<T> testClass) {
