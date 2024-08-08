@@ -6,7 +6,7 @@ CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.interceptor,Mo
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestExtension,48,404,15,35,7,73,14,28,1,16
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestMethodInterceptor.InvocationContext,56,26,1,1,10,9,2,2,1,2
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,SecurityServicesImpl.new Principal() {...},2,15,1,1,1,3,1,2,0,2
-CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiContainer,13,215,2,10,4,44,2,14,0,10
+CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiContainer,13,218,3,11,4,45,3,14,0,10
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestExtension.MockitoHelper,0,17,0,2,0,6,0,3,0,2
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,TestMethodInvocationContext,21,15,0,0,7,6,7,1,7,1
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,SecurityServicesImpl,0,13,0,0,0,5,0,4,0,4
