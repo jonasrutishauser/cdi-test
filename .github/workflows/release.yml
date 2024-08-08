@@ -55,7 +55,7 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
       - name: Create Release Entry
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.release.outputs.RELEASED_VERSION }}
           name: CDI Test ${{ steps.release.outputs.RELEASED_VERSION }}
