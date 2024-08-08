@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      @MethodSource(<span class="jxr_string">"samples"</span>)
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      @ParameterizedTest(name = <span class="jxr_string">"{2}"</span>)
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">void</strong> testCounter(Function&lt;MetricTest, AbstractMetricSample&gt; sampleProvider,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>              Class&lt;? <strong class="jxr_keyword">extends</strong> AbstractMetricSample&gt; type, String $) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>              Class&lt;? <strong class="jxr_keyword">extends</strong> AbstractMetricSample&gt; type, String testName) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          <a name="AbstractMetricSample" href="../../../../../../../com/github/jonasrutishauser/cdi/test/microprofile/metrics/AbstractMetricSample.html#AbstractMetricSample">AbstractMetricSample</a> sample = sampleProvider.apply(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          assertEquals(0, sample.count());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      @MethodSource(<span class="jxr_string">"samples"</span>)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      @ParameterizedTest(name = <span class="jxr_string">"{2}"</span>)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">void</strong> testGauge(Function&lt;MetricTest, AbstractMetricSample&gt; sampleProvider,
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>              Class&lt;? <strong class="jxr_keyword">extends</strong> AbstractMetricSample&gt; type, String $) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              Class&lt;? <strong class="jxr_keyword">extends</strong> AbstractMetricSample&gt; type, String testName) {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>          <a name="AbstractMetricSample" href="../../../../../../../com/github/jonasrutishauser/cdi/test/microprofile/metrics/AbstractMetricSample.html#AbstractMetricSample">AbstractMetricSample</a> sample = sampleProvider.apply(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>         sample.count();
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
