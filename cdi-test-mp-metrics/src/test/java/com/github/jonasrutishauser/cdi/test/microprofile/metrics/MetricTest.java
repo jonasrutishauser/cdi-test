@@ -82,7 +82,7 @@ class MetricTest {
     @MethodSource("samples")
     @ParameterizedTest(name = "{2}")
     void testCounter(Function<MetricTest, AbstractMetricSample> sampleProvider,
-            Class<? extends AbstractMetricSample> type, String $) {
+            Class<? extends AbstractMetricSample> type, String testName) {
         AbstractMetricSample sample = sampleProvider.apply(this);
         assertEquals(0, sample.count());
 
@@ -95,7 +95,7 @@ class MetricTest {
     @MethodSource("samples")
     @ParameterizedTest(name = "{2}")
     void testGauge(Function<MetricTest, AbstractMetricSample> sampleProvider,
-            Class<? extends AbstractMetricSample> type, String $) {
+            Class<? extends AbstractMetricSample> type, String testName) {
         AbstractMetricSample sample = sampleProvider.apply(this);
         sample.count();
 
