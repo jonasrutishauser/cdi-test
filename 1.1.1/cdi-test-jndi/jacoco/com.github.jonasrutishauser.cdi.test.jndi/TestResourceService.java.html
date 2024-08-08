@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestResourceService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test JNDI</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.jndi</a> &gt; <span class="el_source">TestResourceService.java</span></div><h1>TestResourceService.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.jndi;
+
+import static javax.naming.Context.INITIAL_CONTEXT_FACTORY;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.jboss.weld.injection.spi.helpers.AbstractResourceServices;
+import org.osjava.sj.SimpleJndi;
+import org.osjava.sj.jndi.MemoryContext;
+
+import jakarta.annotation.Resource;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+
+<span class="fc" id="L18">public class TestResourceService extends AbstractResourceServices {</span>
+
+    static {
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (System.getProperty(INITIAL_CONTEXT_FACTORY) == null) {</span>
+<span class="fc" id="L22">            System.setProperty(INITIAL_CONTEXT_FACTORY, org.osjava.sj.MemoryContextFactory.class.getName());</span>
+<span class="fc" id="L23">            System.setProperty(SimpleJndi.SHARED, &quot;true&quot;);</span>
+<span class="fc" id="L24">            System.setProperty(SimpleJndi.JNDI_SYNTAX_SEPARATOR, &quot;/&quot;);</span>
+<span class="fc" id="L25">            System.setProperty(MemoryContext.IGNORE_CLOSE, &quot;true&quot;);</span>
+        }
+<span class="fc" id="L27">    }</span>
+
+    @Override
+    public Object resolveResource(InjectionPoint injectionPoint) {
+        try {
+<span class="fc" id="L32">            return super.resolveResource(injectionPoint);</span>
+<span class="nc" id="L33">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L34">            throw e;</span>
+<span class="nc" id="L35">        } catch (RuntimeException e) {</span>
+<span class="nc bnc" id="L36" title="All 4 branches missed.">            if (e.getMessage().startsWith(&quot;Error looking up &quot;) &amp;&amp; injectionPoint.getType() instanceof Class) {</span>
+<span class="nc" id="L37">                Instance&lt;?&gt; instance = CDI.current().select((Class&lt;?&gt;) injectionPoint.getType());</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">                if (instance.isResolvable()) {</span>
+<span class="nc" id="L39">                    return instance.get();</span>
+                }
+            }
+<span class="nc" id="L42">            throw e;</span>
+        }
+    }
+
+    @Override
+    protected String getResourceName(InjectionPoint injectionPoint) {
+<span class="fc" id="L48">        Resource resource = getResourceAnnotation(injectionPoint);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (!resource.lookup().isBlank()) {</span>
+<span class="fc" id="L50">            return resource.lookup();</span>
+        }
+<span class="fc" id="L52">        return super.getResourceName(injectionPoint);</span>
+    }
+
+    @Override
+    protected Context getContext() {
+        try {
+<span class="fc" id="L58">            return new InitialContext();</span>
+<span class="nc" id="L59">        } catch (NamingException e) {</span>
+<span class="nc" id="L60">            throw new IllegalStateException();</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
