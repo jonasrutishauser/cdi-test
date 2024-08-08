@@ -20,7 +20,7 @@ public class BackendService implements Service {
         return sampleService.serviceMethod();
     }
 
-    public String storePersonQualified(Person person) {
+    public String storePersonQualified() {
         return qualifiedSampleService.serviceMethod();
     }
 

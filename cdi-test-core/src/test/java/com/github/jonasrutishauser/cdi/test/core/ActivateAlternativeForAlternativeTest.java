@@ -2,6 +2,7 @@ package com.github.jonasrutishauser.cdi.test.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,15 +30,8 @@ class ActivateAlternativeForAlternativeTest {
     @Inject
     private BackendService backendService;
 
-    @Test
+    @RepeatedTest(2)
     void callTestActivatedService() {
-        backendService.storePerson(new Person());
-        backendService.storePerson(new Person());
-        assertEquals(2, testOverride.getInvocationCounter());
-    }
-
-    @Test
-    void callTestActivatedServiceIndependently() {
         backendService.storePerson(new Person());
         backendService.storePerson(new Person());
         assertEquals(2, testOverride.getInvocationCounter());

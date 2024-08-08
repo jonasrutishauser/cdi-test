@@ -91,13 +91,9 @@ public class TestContext implements AlterableContext {
             this.ctx = ctx;
         }
 
-        public T getInstance() {
+        public synchronized T getInstance() {
             if (instance == null) {
-                synchronized (this) {
-                    if (instance == null) {
-                        instance = contextual.create(ctx);
-                    }
-                }
+                instance = contextual.create(ctx);
             }
             return instance;
         }

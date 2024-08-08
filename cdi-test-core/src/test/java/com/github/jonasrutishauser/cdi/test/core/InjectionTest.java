@@ -76,7 +76,7 @@ class InjectionTest {
     @Test
     void qualifierInjectionWorkingOnTestedClass() {
         assertEquals("OverridingServiceImpl", backendService.storePerson(person));
-        assertEquals("QualifiedOverriddenServiceImpl", backendService.storePersonQualified(person));
+        assertEquals("QualifiedOverriddenServiceImpl", backendService.storePersonQualified());
     }
 
     @Test

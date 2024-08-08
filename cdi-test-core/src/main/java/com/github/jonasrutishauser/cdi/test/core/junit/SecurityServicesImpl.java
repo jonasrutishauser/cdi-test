@@ -16,19 +16,24 @@ public class SecurityServicesImpl implements SecurityServices {
 
     @Override
     public Principal getPrincipal() {
-        return new Principal() {
-            @Override
-            public String getName() {
-                if (testInfo == null) {
-                    return "test-principal";
-                }
-                return testInfo.getTestName();
-            }
-        };
+        return new TestPrincipal(testInfo == null ? "test-principal" : testInfo.getTestName());
     }
 
     @Override
     public void cleanup() {
         // nothing to do
+    }
+
+    private static final class TestPrincipal implements Principal {
+        private final String name;
+
+        public TestPrincipal(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
     }
 }
