@@ -16,20 +16,25 @@ import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 
     @Override
     public Principal getPrincipal() {
-<span class="fc" id="L19">        return new Principal() {</span>
-            @Override
-            public String getName() {
-<span class="pc bpc" id="L22" title="1 of 2 branches missed.">                if (testInfo == null) {</span>
-<span class="nc" id="L23">                    return &quot;test-principal&quot;;</span>
-                }
-<span class="fc" id="L25">                return testInfo.getTestName();</span>
-            }
-        };
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        return new TestPrincipal(testInfo == null ? &quot;test-principal&quot; : testInfo.getTestName());</span>
     }
 
     @Override
     public void cleanup() {
         // nothing to do
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L25">    }</span>
+
+    private static final class TestPrincipal implements Principal {
+        private final String name;
+
+<span class="fc" id="L30">        public TestPrincipal(String name) {</span>
+<span class="fc" id="L31">            this.name = name;</span>
+<span class="fc" id="L32">        }</span>
+
+        @Override
+        public String getName() {
+<span class="fc" id="L36">            return name;</span>
+        }
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
