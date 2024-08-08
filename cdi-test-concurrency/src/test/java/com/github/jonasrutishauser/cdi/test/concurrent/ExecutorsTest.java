@@ -40,11 +40,15 @@ class ExecutorsTest {
     @Inject
     private ManagedThreadFactory threadFactory;
 
+    @Inject
+    private ApplicationScopedBean applicationScopedBean;
+
     @Test
     void inject() {
         assertNotNull(executorService);
         assertNotNull(scheduledExecutorService);
         assertNotNull(threadFactory);
+        assertNotNull(applicationScopedBean);
     }
 
     @Test

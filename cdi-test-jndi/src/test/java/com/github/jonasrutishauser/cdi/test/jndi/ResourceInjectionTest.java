@@ -15,12 +15,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.github.jonasrutishauser.cdi.test.core.junit.CdiTestJunitExtension;
 
 import jakarta.annotation.Resource;
+import jakarta.inject.Inject;
 
 @ExtendWith(CdiTestJunitExtension.class)
 @EnvEntry(name = "env/string", value = "foo-bar")
 @EnvEntry(name = "env/int", type = Integer.class, value = "42")
 @EnvEntry(name = "string", value = "test", compEnv = true)
-@EnvEntry(name = "com.github.jonasrutishauser.cdi.test.jndi.ResourceInjectionTest/defaultName", value = "foo", compEnv = true)
+@EnvEntry(name = "com.github.jonasrutishauser.cdi.test.jndi.ResourceInjectionTest/defaultName", value = "foo",
+        compEnv = true)
 @DataSourceEntry(name = "ds/test", driver = Driver.class, url = "jdbc:h2:mem:test", user = "sa", password = "sa")
 class ResourceInjectionTest {
 
@@ -42,6 +44,9 @@ class ResourceInjectionTest {
     @Resource(lookup = "ds/global")
     DataSource globalDataSource;
 
+    @Inject
+    ApplicationScopedBean applicationScopedBean;
+
     @Test
     void injection() {
         assertEquals("foo-bar", stringProperty);
@@ -50,6 +55,7 @@ class ResourceInjectionTest {
         assertEquals("foo", defaultName);
         assertNotNull(dataSource);
         assertNotNull(globalDataSource);
+        assertNotNull(applicationScopedBean);
     }
 
     @Test
@@ -66,6 +72,11 @@ class ResourceInjectionTest {
         try (Connection connection = globalDataSource.getConnection()) {
             assertNotNull(connection);
         }
+    }
+
+    @Test
+    void applicationScopedDataSource() {
+        assertEquals(globalDataSource, applicationScopedBean.getGlobalDataSource());
     }
 
 }

@@ -1,5 +1,7 @@
 package com.github.jonasrutishauser.cdi.test.jndi;
 
+import static jakarta.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -34,6 +36,8 @@ import com.github.jonasrutishauser.cdi.test.api.TestInfo;
 import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
 
 import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.event.Observes;
 
@@ -47,7 +51,13 @@ class TestEnvEntries {
     private final Map<String, Object> oldValues = new HashMap<>();
     private final List<Connection> connections = new ArrayList<>();
 
-    void registerEnvEntries(@Observes @Initialized(TestScoped.class) TestInfo testInfo) {
+    void registerGlobalEnvEntries(@Observes @Priority(LIBRARY_BEFORE) @Initialized(ApplicationScoped.class) Object event) {
+        for (Entry<String, Properties> dataSource : GLOBAL_DATA_SOURCES.entrySet()) {
+            registerDataSource(dataSource.getKey(), dataSource.getValue());
+        }
+    }
+
+    void registerEnvEntries(@Observes @Priority(LIBRARY_BEFORE) @Initialized(TestScoped.class) TestInfo testInfo) {
         for (Entry<String, Properties> dataSource : GLOBAL_DATA_SOURCES.entrySet()) {
             registerDataSource(dataSource.getKey(), dataSource.getValue());
         }
