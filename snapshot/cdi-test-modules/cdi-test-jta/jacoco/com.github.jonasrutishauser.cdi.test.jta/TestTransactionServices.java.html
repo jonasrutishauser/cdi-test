@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestTransactionServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test JTA</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.jta</a> &gt; <span class="el_source">TestTransactionServices.java</span></div><h1>TestTransactionServices.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.jta;
+
+import java.util.function.Supplier;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
+
+import org.jboss.logging.Logger;
+import org.jboss.weld.transaction.spi.TransactionServices;
+
+import com.arjuna.ats.jta.TransactionManager;
+import com.arjuna.ats.jta.common.jtaPropertyManager;
+
+import jakarta.transaction.RollbackException;
+import jakarta.transaction.Status;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.SystemException;
+import jakarta.transaction.UserTransaction;
+
+/**
+ * SPI extension point of the Weld for integrate with transaction manager. If
+ * the interface is implemented by the deployment the Weld stops to show info
+ * message:
+ * &lt;p&gt;
+ * &lt;code&gt;
+ *  WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available.
+ *    Transactional observers will be invoked synchronously.
+ * &lt;/code&gt;
+ * &lt;/p&gt;
+ */
+public class TestTransactionServices implements TransactionServices {
+<span class="fc" id="L34">    private static final Logger LOG = Logger.getLogger(TestTransactionServices.class);</span>
+
+<span class="fc" id="L36">    public TestTransactionServices() {</span>
+        try {
+<span class="nc" id="L38">            registerInJndi(jtaPropertyManager.getJTAEnvironmentBean().getTransactionManagerJNDIContext(),</span>
+                    TransactionManager::transactionManager);
+<span class="nc" id="L40">            registerInJndi(</span>
+<span class="nc" id="L41">                    jtaPropertyManager.getJTAEnvironmentBean().getTransactionSynchronizationRegistryJNDIContext(),</span>
+<span class="nc" id="L42">                    jtaPropertyManager.getJTAEnvironmentBean()::getTransactionSynchronizationRegistry);</span>
+<span class="fc" id="L43">        } catch (NamingException e) {</span>
+            // ignore
+<span class="nc" id="L45">        }</span>
+<span class="fc" id="L46">    }</span>
+
+    private void registerInJndi(String jndiName, Supplier&lt;?&gt; supplier) throws NamingException {
+<span class="fc" id="L49">        int lastSeparator = jndiName.lastIndexOf('/');</span>
+<span class="fc" id="L50">        Context context = new InitialContext();</span>
+        try {
+<span class="nc" id="L52">            context.lookup(jndiName);</span>
+<span class="nc" id="L53">        } catch (NameNotFoundException e) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (lastSeparator &gt; 0) {</span>
+<span class="nc" id="L55">                ((Context) context.lookup(jndiName.substring(0, lastSeparator)))</span>
+<span class="nc" id="L56">                        .bind(jndiName.substring(lastSeparator + 1), supplier.get());</span>
+            } else {
+<span class="nc" id="L58">                context.bind(jndiName, supplier.get());</span>
+            }
+<span class="fc" id="L60">        } catch (NamingException e) {</span>
+<span class="nc" id="L61">            context.createSubcontext(jndiName.substring(0, lastSeparator)).bind(jndiName.substring(lastSeparator + 1),</span>
+<span class="nc" id="L62">                    supplier.get());</span>
+        } finally {
+<span class="fc" id="L64">            context.close();</span>
+        }
+<span class="nc" id="L66">    }</span>
+
+    @Override
+    public void registerSynchronization(Synchronization synchronizedObserver) {
+        try {
+<span class="fc" id="L71">            TransactionManager.transactionManager().getTransaction().registerSynchronization(synchronizedObserver);</span>
+<span class="nc" id="L72">        } catch (SystemException | IllegalStateException | RollbackException e) {</span>
+<span class="nc" id="L73">            throw new IllegalStateException(&quot;Cannot register synchronization observer &quot; + synchronizedObserver</span>
+                    + &quot; to the available transaction&quot;, e);
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">    }</span>
+
+    @Override
+    public boolean isTransactionActive() {
+        try {
+<span class="fc" id="L81">            int status = TransactionManager.transactionManager().getStatus();</span>
+<span class="pc bpc" id="L82" title="6 of 14 branches missed.">            return status == Status.STATUS_ACTIVE || status == Status.STATUS_COMMITTING</span>
+                    || status == Status.STATUS_MARKED_ROLLBACK || status == Status.STATUS_PREPARED
+                    || status == Status.STATUS_PREPARING || status == Status.STATUS_ROLLING_BACK
+                    || status == Status.STATUS_UNKNOWN;
+<span class="nc" id="L86">        } catch (SystemException se) {</span>
+<span class="nc" id="L87">            LOG.error(&quot;Cannot obtain the status of the transaction&quot;, se);</span>
+<span class="nc" id="L88">            return false;</span>
+        }
+    }
+
+    @Override
+    public UserTransaction getUserTransaction() {
+<span class="fc" id="L94">        return com.arjuna.ats.jta.UserTransaction.userTransaction();</span>
+    }
+
+    @Override
+    public void cleanup() {
+        // nothing to clean
+<span class="fc" id="L100">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
