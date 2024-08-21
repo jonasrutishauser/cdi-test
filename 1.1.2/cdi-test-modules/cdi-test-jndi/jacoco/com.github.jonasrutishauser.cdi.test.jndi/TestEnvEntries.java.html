@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestEnvEntries.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test JNDI</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.jndi</a> &gt; <span class="el_source">TestEnvEntries.java</span></div><h1>TestEnvEntries.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.jndi;
+
+import static jakarta.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.stream.Stream;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import org.osjava.sj.loader.JndiLoader;
+
+import com.github.jonasrutishauser.cdi.test.api.TestInfo;
+import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
+
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.event.Observes;
+
+@TestScoped
+<span class="fc" id="L45">class TestEnvEntries {</span>
+
+<span class="fc" id="L47">    private static final Map&lt;String, Properties&gt; GLOBAL_DATA_SOURCES = findResourcesProperties(&quot;datasource&quot;);</span>
+
+<span class="fc" id="L49">    private final Context rootContext = getRootContext();</span>
+<span class="fc" id="L50">    private final JndiLoader loader = createJndiLoader();</span>
+<span class="fc" id="L51">    private final Map&lt;String, Object&gt; oldValues = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L52">    private final List&lt;Connection&gt; connections = new ArrayList&lt;&gt;();</span>
+
+    void registerGlobalEnvEntries(@Observes @Priority(LIBRARY_BEFORE) @Initialized(ApplicationScoped.class) Object event) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (Entry&lt;String, Properties&gt; dataSource : GLOBAL_DATA_SOURCES.entrySet()) {</span>
+<span class="fc" id="L56">            registerDataSource(dataSource.getKey(), dataSource.getValue());</span>
+<span class="fc" id="L57">        }</span>
+<span class="fc" id="L58">    }</span>
+
+    void registerEnvEntries(@Observes @Priority(LIBRARY_BEFORE) @Initialized(TestScoped.class) TestInfo testInfo) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for (Entry&lt;String, Properties&gt; dataSource : GLOBAL_DATA_SOURCES.entrySet()) {</span>
+<span class="fc" id="L62">            registerDataSource(dataSource.getKey(), dataSource.getValue());</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (EnvEntry envEntry : testInfo.getTestClass().getAnnotationsByType(EnvEntry.class)) {</span>
+<span class="fc" id="L65">            registerEnvEntry(envEntry);</span>
+        }
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (EnvEntry envEntry : testInfo.getTestMethod().getAnnotationsByType(EnvEntry.class)) {</span>
+<span class="fc" id="L68">            registerEnvEntry(envEntry);</span>
+        }
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (DataSourceEntry envEntry : testInfo.getTestClass().getAnnotationsByType(DataSourceEntry.class)) {</span>
+<span class="fc" id="L71">            registerDataSource(envEntry);</span>
+        }
+<span class="fc" id="L73">    }</span>
+
+    @PreDestroy
+    void unregisterEnvEntries() {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (Connection connection : connections) {</span>
+            try {
+<span class="fc" id="L79">                connection.close();</span>
+<span class="nc" id="L80">            } catch (SQLException e) {</span>
+                // ignore
+<span class="fc" id="L82">            }</span>
+<span class="fc" id="L83">        }</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (Entry&lt;String, Object&gt; oldValue : oldValues.entrySet()) {</span>
+            try {
+<span class="fc" id="L86">                unbind(oldValue.getKey());</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                if (oldValue.getValue() != null) {</span>
+<span class="fc" id="L88">                    bind(oldValue.getKey(), oldValue.getValue());</span>
+                }
+<span class="nc" id="L90">            } catch (NamingException e) {</span>
+<span class="nc" id="L91">                throw new IllegalStateException(e);</span>
+<span class="fc" id="L92">            }</span>
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">    }</span>
+
+    private static Map&lt;String, Properties&gt; findResourcesProperties(String folder) {
+<span class="fc" id="L97">        Map&lt;String, Properties&gt; properties = new HashMap&lt;&gt;();</span>
+        Enumeration&lt;URL&gt; folders;
+        try {
+<span class="fc" id="L100">            folders = TestEnvEntries.class.getClassLoader().getResources(folder);</span>
+<span class="nc" id="L101">        } catch (IOException e) {</span>
+<span class="nc" id="L102">            return Collections.emptyMap();</span>
+<span class="fc" id="L103">        }</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        while (folders.hasMoreElements()) {</span>
+            URI uri;
+            try {
+<span class="fc" id="L107">                uri = folders.nextElement().toURI();</span>
+<span class="nc" id="L108">            } catch (URISyntaxException e) {</span>
+<span class="nc" id="L109">                throw new IllegalStateException(e);</span>
+<span class="fc" id="L110">            }</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (&quot;jar&quot;.equals(uri.getScheme())) {</span>
+<span class="fc" id="L112">                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {</span>
+<span class="fc" id="L113">                    properties.putAll(findResourcesProperties(fileSystem.provider().getPath(uri)));</span>
+<span class="nc" id="L114">                } catch (IOException e) {</span>
+                    // ignore
+<span class="pc" id="L116">                }</span>
+            } else {
+<span class="fc" id="L118">                properties.putAll(findResourcesProperties(Paths.get(uri)));</span>
+            }
+<span class="fc" id="L120">        }</span>
+<span class="fc" id="L121">        return properties;</span>
+    }
+
+    private static Map&lt;String, Properties&gt; findResourcesProperties(Path folder) {
+<span class="fc" id="L125">        Map&lt;String, Properties&gt; properties = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L126">        try (Stream&lt;Path&gt; walkStream = Files.walk(folder)) {</span>
+<span class="pc bpc" id="L127" title="1 of 4 branches missed.">            walkStream.filter(p -&gt; Files.isRegularFile(p) &amp;&amp; p.toString().endsWith(&quot;.properties&quot;)).forEach(f -&gt; {</span>
+<span class="fc" id="L128">                Properties props = new Properties();</span>
+<span class="fc" id="L129">                try (InputStream in = Files.newInputStream(f)) {</span>
+<span class="fc" id="L130">                    props.load(in);</span>
+<span class="fc" id="L131">                    properties.put(folder.relativize(f).toString().replaceAll(&quot;\\.properties$&quot;, &quot;&quot;), props);</span>
+<span class="nc" id="L132">                } catch (IOException e) {</span>
+                    // ignore
+<span class="fc" id="L134">                }</span>
+<span class="fc" id="L135">            });</span>
+<span class="nc" id="L136">        } catch (IOException e1) {</span>
+            // ignore
+<span class="fc" id="L138">        }</span>
+<span class="fc" id="L139">        return properties;</span>
+    }
+
+    private void bind(String name, Object value) throws NamingException {
+<span class="fc" id="L143">        int lastSeparator = name.lastIndexOf(&quot;/&quot;);</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (lastSeparator &gt; 0) {</span>
+<span class="fc" id="L145">            String subContextName = name.substring(0, lastSeparator);</span>
+<span class="fc" id="L146">            ((Context) rootContext.lookup(subContextName)).bind(name.substring(lastSeparator + 1), value);</span>
+<span class="fc" id="L147">        } else {</span>
+<span class="nc" id="L148">            rootContext.bind(name, value);</span>
+        }
+<span class="fc" id="L150">    }</span>
+
+    private void unbind(String name) throws NamingException {
+<span class="fc" id="L153">        int lastSeparator = name.lastIndexOf(&quot;/&quot;);</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (lastSeparator &gt; 0) {</span>
+<span class="fc" id="L155">            String subContextName = name.substring(0, lastSeparator);</span>
+<span class="fc" id="L156">            ((Context) rootContext.lookup(subContextName)).unbind(name.substring(lastSeparator + 1));</span>
+<span class="fc" id="L157">        } else {</span>
+<span class="nc" id="L158">            rootContext.unbind(name);</span>
+        }
+<span class="fc" id="L160">    }</span>
+
+    private void registerDataSource(String name, Properties properties) {
+<span class="fc" id="L163">        storeAndRemoveOldEntry(name);</span>
+        try {
+<span class="fc" id="L165">            Properties prefixedProperties = new Properties();</span>
+<span class="fc" id="L166">            properties.forEach((key, value) -&gt; prefixedProperties.put(name + &quot;/&quot; + key, value));</span>
+<span class="fc" id="L167">            prefixedProperties.put(name + &quot;/type&quot;, DataSource.class.getName());</span>
+<span class="fc" id="L168">            loader.load(prefixedProperties, rootContext);</span>
+<span class="nc" id="L169">        } catch (NamingException e) {</span>
+<span class="nc" id="L170">            throw new IllegalStateException(e);</span>
+<span class="fc" id="L171">        }</span>
+        try {
+<span class="fc" id="L173">            Connection connection = ((DataSource) rootContext.lookup(name)).getConnection();</span>
+<span class="fc" id="L174">            connections.add(connection);</span>
+<span class="nc" id="L175">        } catch (SQLException | NamingException e) {</span>
+            // ignore
+<span class="fc" id="L177">        }</span>
+<span class="fc" id="L178">    }</span>
+
+    private void registerDataSource(DataSourceEntry dataSource) {
+<span class="fc" id="L181">        String name = getName(dataSource);</span>
+<span class="fc" id="L182">        storeAndRemoveOldEntry(name);</span>
+        try {
+<span class="fc" id="L184">            loader.load(createProperties(dataSource), rootContext);</span>
+<span class="nc" id="L185">        } catch (NamingException e) {</span>
+<span class="nc" id="L186">            throw new IllegalStateException(e);</span>
+<span class="fc" id="L187">        }</span>
+        try {
+<span class="fc" id="L189">            Connection connection = ((DataSource) rootContext.lookup(name)).getConnection();</span>
+<span class="fc" id="L190">            connections.add(connection);</span>
+<span class="nc" id="L191">        } catch (SQLException | NamingException e) {</span>
+            // ignore
+<span class="fc" id="L193">        }</span>
+<span class="fc" id="L194">    }</span>
+
+    private void registerEnvEntry(EnvEntry envEntry) {
+<span class="fc" id="L197">        String name = getName(envEntry);</span>
+<span class="fc" id="L198">        storeAndRemoveOldEntry(name);</span>
+        try {
+<span class="fc" id="L200">            loader.load(createProperties(envEntry), rootContext);</span>
+<span class="nc" id="L201">        } catch (NamingException e) {</span>
+<span class="nc" id="L202">            throw new IllegalStateException(e);</span>
+<span class="fc" id="L203">        }</span>
+<span class="fc" id="L204">    }</span>
+
+    private void storeAndRemoveOldEntry(String name) {
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (!oldValues.containsKey(name)) {</span>
+            try {
+<span class="fc" id="L209">                oldValues.put(name, rootContext.lookup(name));</span>
+<span class="fc" id="L210">            } catch (NamingException e) {</span>
+<span class="fc" id="L211">                oldValues.put(name, null);</span>
+<span class="fc" id="L212">            }</span>
+            try {
+<span class="fc" id="L214">                unbind(name);</span>
+<span class="fc" id="L215">            } catch (NamingException e) {</span>
+                // ignore
+<span class="fc" id="L217">            }</span>
+        } else {
+            try {
+<span class="fc" id="L220">                unbind(name);</span>
+<span class="nc" id="L221">            } catch (NamingException e) {</span>
+                // ignore
+<span class="fc" id="L223">            }</span>
+        }
+<span class="fc" id="L225">    }</span>
+
+    private Properties createProperties(EnvEntry envEntry) {
+<span class="fc" id="L228">        Properties properties = new Properties();</span>
+<span class="fc" id="L229">        String name = getName(envEntry);</span>
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        properties.put(name + &quot;/type&quot;, EnvEntry.UNSPECIFIED.equals(envEntry.typeAsString()) ? envEntry.type().getName()</span>
+<span class="nc" id="L231">                : envEntry.typeAsString());</span>
+<span class="fc" id="L232">        properties.put(name, envEntry.value());</span>
+<span class="fc" id="L233">        return properties;</span>
+    }
+
+    private Properties createProperties(DataSourceEntry dataSource) {
+<span class="fc" id="L237">        Properties properties = new Properties();</span>
+<span class="fc" id="L238">        String prefix = getName(dataSource) + &quot;/&quot;;</span>
+<span class="fc" id="L239">        properties.put(prefix + &quot;type&quot;, DataSource.class.getName());</span>
+<span class="fc" id="L240">        properties.put(prefix + &quot;driver&quot;,</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                DataSourceEntry.UNSPECIFIED.equals(dataSource.driverAsString()) ? dataSource.driver().getName()</span>
+<span class="nc" id="L242">                        : dataSource.driverAsString());</span>
+<span class="fc" id="L243">        properties.put(prefix + &quot;url&quot;, dataSource.url());</span>
+<span class="fc" id="L244">        properties.put(prefix + &quot;user&quot;, dataSource.user());</span>
+<span class="fc" id="L245">        properties.put(prefix + &quot;password&quot;, dataSource.password());</span>
+<span class="fc" id="L246">        return properties;</span>
+    }
+
+    private String getName(EnvEntry envEntry) {
+<span class="fc" id="L250">        String name = envEntry.name();</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (envEntry.compEnv()) {</span>
+<span class="fc" id="L252">            name = &quot;java:comp/env/&quot; + name;</span>
+        }
+<span class="fc" id="L254">        return name;</span>
+    }
+
+    private String getName(DataSourceEntry dataSource) {
+<span class="fc" id="L258">        String name = dataSource.name();</span>
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">        if (dataSource.compEnv()) {</span>
+<span class="nc" id="L260">            name = &quot;java:comp/env/&quot; + name;</span>
+        }
+<span class="fc" id="L262">        return name;</span>
+    }
+
+    @SuppressWarnings({&quot;unchecked&quot;, &quot;rawtypes&quot;})
+    private JndiLoader createJndiLoader() {
+        Hashtable&lt;String, String&gt; env;
+        try {
+<span class="fc" id="L269">            env = new Hashtable&lt;&gt;((Map) rootContext.getEnvironment());</span>
+<span class="nc" id="L270">        } catch (NamingException e) {</span>
+<span class="nc" id="L271">            throw new IllegalStateException(e);</span>
+<span class="fc" id="L272">        }</span>
+<span class="fc" id="L273">        env.put(JndiLoader.DELIMITER, &quot;/&quot;);</span>
+<span class="fc" id="L274">        return new JndiLoader(env);</span>
+    }
+
+    private Context getRootContext() {
+        try {
+<span class="fc" id="L279">            return new InitialContext();</span>
+<span class="nc" id="L280">        } catch (NamingException e) {</span>
+<span class="nc" id="L281">            throw new IllegalStateException();</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
