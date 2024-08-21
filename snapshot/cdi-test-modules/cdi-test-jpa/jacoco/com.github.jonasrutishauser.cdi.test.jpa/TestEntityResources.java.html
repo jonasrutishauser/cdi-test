@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestEntityResources.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test JPA</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.jpa</a> &gt; <span class="el_source">TestEntityResources.java</span></div><h1>TestEntityResources.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.jpa;
+
+import static java.util.Collections.emptyMap;
+import static org.eclipse.persistence.config.PersistenceUnitProperties.CDI_BEANMANAGER;
+import static org.eclipse.persistence.config.PersistenceUnitProperties.TARGET_SERVER;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.eclipse.persistence.transaction.JTA11TransactionController;
+import org.eclipse.persistence.transaction.JTATransactionController;
+
+import com.arjuna.ats.jta.TransactionManager;
+import com.arjuna.ats.jta.common.jtaPropertyManager;
+import com.github.jonasrutishauser.cdi.test.api.context.TestScoped;
+
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.inject.spi.BeanManager;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
+@TestScoped
+public class TestEntityResources {
+
+    static {
+        try {
+<span class="fc" id="L30">            EclipselinkSupport.install();</span>
+<span class="nc" id="L31">        } catch (Throwable t) {</span>
+            // ignore
+<span class="fc" id="L33">        }</span>
+    }
+
+<span class="fc" id="L36">    private static Map&lt;String, Map&lt;String, String&gt;&gt; additionalProperties = new ConcurrentHashMap&lt;&gt;();</span>
+
+    static void addAdditionalProperties(String persistenceUnit, Map&lt;String, String&gt; properties) {
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (!properties.isEmpty()) {</span>
+<span class="fc" id="L40">            additionalProperties.computeIfAbsent(persistenceUnit, key -&gt; new ConcurrentHashMap&lt;&gt;()).putAll(properties);</span>
+        }
+<span class="fc" id="L42">    }</span>
+
+<span class="fc" id="L44">    private final Map&lt;String, EntityManager&gt; entityManagers = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc" id="L45">    private final Map&lt;String, EntityManagerFactory&gt; entityManagerFactories = new ConcurrentHashMap&lt;&gt;();</span>
+
+    private final BeanManager beanManager;
+
+    TestEntityResources() {
+<span class="nc" id="L50">        this(null);</span>
+<span class="nc" id="L51">    }</span>
+
+    @Inject
+<span class="fc" id="L54">    TestEntityResources(BeanManager beanManager) {</span>
+<span class="fc" id="L55">        this.beanManager = beanManager;</span>
+<span class="fc" id="L56">    }</span>
+
+    public EntityManager resolveEntityManager(String name) {
+<span class="fc" id="L59">        return entityManagers.computeIfAbsent(name, this::createEntityManager);</span>
+    }
+
+    public EntityManagerFactory resolveEntityManagerFactory(String name) {
+<span class="fc" id="L63">        return entityManagerFactories.computeIfAbsent(name, this::createEntityManagerFactory);</span>
+    }
+
+    private EntityManager createEntityManager(String name) {
+<span class="fc" id="L67">        return resolveEntityManagerFactory(name).createEntityManager();</span>
+    }
+
+    private EntityManagerFactory createEntityManagerFactory(String persistenceUnit) {
+<span class="fc" id="L71">        Map&lt;String, Object&gt; properties = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L72">        properties.putAll(additionalProperties.getOrDefault(persistenceUnit, emptyMap()));</span>
+<span class="fc" id="L73">        properties.put(CDI_BEANMANAGER, beanManager);</span>
+<span class="fc" id="L74">        properties.put(TARGET_SERVER, &quot;org.eclipse.persistence.transaction.JTA11TransactionController&quot;);</span>
+<span class="fc" id="L75">        return Persistence.createEntityManagerFactory(persistenceUnit, properties);</span>
+    }
+
+    @PreDestroy
+    void closeResources() {
+<span class="fc" id="L80">        entityManagers.values().forEach(EntityManager::close);</span>
+<span class="fc" id="L81">        entityManagers.clear();</span>
+<span class="fc" id="L82">        entityManagerFactories.values().forEach(EntityManagerFactory::close);</span>
+<span class="fc" id="L83">        entityManagerFactories.clear();</span>
+<span class="fc" id="L84">    }</span>
+
+    private static class EclipselinkSupport {
+        private static void install() {
+<span class="fc" id="L88">            JTATransactionController.setDefaultTransactionManager(TransactionManager.transactionManager());</span>
+<span class="fc" id="L89">            JTA11TransactionController.setDefaultTransactionSynchronizationRegistry(</span>
+<span class="fc" id="L90">                    jtaPropertyManager.getJTAEnvironmentBean().getTransactionSynchronizationRegistry());</span>
+<span class="fc" id="L91">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
