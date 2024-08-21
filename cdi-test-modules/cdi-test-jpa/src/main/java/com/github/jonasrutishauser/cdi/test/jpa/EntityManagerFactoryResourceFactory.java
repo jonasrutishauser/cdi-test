@@ -33,8 +33,7 @@ public class EntityManagerFactoryResourceFactory implements ResourceReferenceFac
 
             @Override
             public void release() {
-                LOG.trace("closing EntityManagerFactory" + emf);
-                emf.close();
+                LOG.trace("closing EntityManagerFactory will be done by TestEntityResources");
             }
         };
     }

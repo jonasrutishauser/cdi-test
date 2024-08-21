@@ -6,9 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.h2.Driver;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -44,8 +49,25 @@ class ResourceInjectionTest {
     @Resource(lookup = "ds/global")
     DataSource globalDataSource;
 
+    @Resource(lookup = "ds/jar-global")
+    DataSource jarGlobalDataSource;
+
     @Inject
     ApplicationScopedBean applicationScopedBean;
+
+    @BeforeAll
+    static void setDummyEntries() throws NamingException, ClassNotFoundException {
+        Class.forName(TestResourceService.class.getName()); // call static initializer
+        Context context = new InitialContext();
+        context = context.createSubcontext("env");
+        context.bind("string", "some-wrong-string");
+    }
+
+    @AfterAll
+    static void ensureRestoredEntries() throws NamingException {
+        Context context = new InitialContext();
+        assertEquals("some-wrong-string", context.lookup("env/string"));
+    }
 
     @Test
     void injection() {
@@ -55,6 +77,7 @@ class ResourceInjectionTest {
         assertEquals("foo", defaultName);
         assertNotNull(dataSource);
         assertNotNull(globalDataSource);
+        assertNotNull(jarGlobalDataSource);
         assertNotNull(applicationScopedBean);
     }
 
