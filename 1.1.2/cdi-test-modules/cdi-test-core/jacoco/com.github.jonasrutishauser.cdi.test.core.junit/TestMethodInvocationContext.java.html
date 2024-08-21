@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestMethodInvocationContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test Implementation</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.core.junit</a> &gt; <span class="el_source">TestMethodInvocationContext.java</span></div><h1>TestMethodInvocationContext.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.core.junit;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.Map;
+
+import jakarta.interceptor.InvocationContext;
+
+abstract class TestMethodInvocationContext&lt;T&gt; implements InvocationContext {
+
+    private final Map&lt;String, Object&gt; contextData;
+
+    private final T target;
+    private final Method method;
+    private Object[] parameters;
+    
+<span class="fc" id="L17">    protected TestMethodInvocationContext(T target, Method method, Object[] parameters, Map&lt;String, Object&gt; contextData) {</span>
+<span class="fc" id="L18">        this.target = target;</span>
+<span class="fc" id="L19">        this.method = method;</span>
+<span class="fc" id="L20">        this.parameters = parameters;</span>
+<span class="fc" id="L21">        this.contextData = contextData;</span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public Object getTarget() {
+<span class="nc" id="L26">        return target;</span>
+    }
+
+    @Override
+    public Object getTimer() {
+<span class="nc" id="L31">        return null;</span>
+    }
+
+    @Override
+    public Method getMethod() {
+<span class="nc" id="L36">        return method;</span>
+    }
+
+    @Override
+    public Constructor&lt;?&gt; getConstructor() {
+<span class="nc" id="L41">        return null;</span>
+    }
+
+    @Override
+    public Object[] getParameters() {
+<span class="nc" id="L46">        return parameters;</span>
+    }
+
+    @Override
+    public void setParameters(Object[] params) {
+<span class="nc" id="L51">        throw new UnsupportedOperationException(&quot;Not supported by junit&quot;);</span>
+    }
+
+    @Override
+    public Map&lt;String, Object&gt; getContextData() {
+<span class="nc" id="L56">        return contextData;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
