@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EjbSupportBeanArchiveBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CDI Test EJB</a> &gt; <a href="index.source.html" class="el_package">com.github.jonasrutishauser.cdi.test.ejb</a> &gt; <span class="el_source">EjbSupportBeanArchiveBuilder.java</span></div><h1>EjbSupportBeanArchiveBuilder.java</h1><pre class="source lang-java linenums">package com.github.jonasrutishauser.cdi.test.ejb;
+
+import static java.util.stream.Collectors.toUnmodifiableList;
+import static java.util.stream.Stream.concat;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import org.jboss.weld.ejb.spi.BusinessInterfaceDescriptor;
+import org.jboss.weld.ejb.spi.EjbDescriptor;
+import org.jboss.weld.environment.deployment.WeldBeanDeploymentArchive;
+import org.jboss.weld.environment.deployment.discovery.BeanArchiveBuilder;
+import org.jboss.weld.environment.util.Reflections;
+import org.jboss.weld.resources.spi.ResourceLoader;
+
+import jakarta.ejb.Local;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Stateful;
+import jakarta.ejb.Stateless;
+
+public class EjbSupportBeanArchiveBuilder extends BeanArchiveBuilder {
+
+    private Set&lt;String&gt; originalClasses;
+
+<span class="fc" id="L33">    public EjbSupportBeanArchiveBuilder(BeanArchiveBuilder source) {</span>
+<span class="fc" id="L34">        source.getClasses().forEach(this::addClass);</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public Iterator&lt;String&gt; getClassIterator() {
+<span class="fc" id="L39">        originalClasses = new HashSet&lt;&gt;(getClasses());</span>
+<span class="fc" id="L40">        return super.getClassIterator();</span>
+    }
+
+    @Override
+    public WeldBeanDeploymentArchive build() {
+<span class="fc" id="L45">        WeldBeanDeploymentArchive archive = super.build();</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        Collection&lt;String&gt; classes = originalClasses == null ? archive.getBeanClasses() : originalClasses;</span>
+<span class="fc" id="L47">        return new WeldBeanDeploymentArchive(archive.getId(), archive.getBeanClasses(), archive.getKnownClasses(),</span>
+<span class="fc" id="L48">                archive.getBeansXml()) {</span>
+            private Collection&lt;EjbDescriptor&lt;?&gt;&gt; ejbs;
+
+            @Override
+            public Collection&lt;EjbDescriptor&lt;?&gt;&gt; getEjbs() {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">                if (ejbs == null) {</span>
+<span class="fc" id="L54">                    discoverEjbs();</span>
+                }
+<span class="fc" id="L56">                return ejbs;</span>
+            }
+
+            private void discoverEjbs() {
+<span class="fc" id="L60">                ejbs = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">                for (String className : classes) {</span>
+<span class="fc" id="L62">                    Class&lt;?&gt; clazz = Reflections.loadClass(getServices().get(ResourceLoader.class), className);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                    if (clazz == null) {</span>
+<span class="fc" id="L64">                        continue;</span>
+                    }
+<span class="fc bfc" id="L66" title="All 4 branches covered.">                    if (clazz.isAnnotationPresent(Singleton.class) || clazz.isAnnotationPresent(Stateless.class)</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                            || clazz.isAnnotationPresent(Stateful.class)) {</span>
+<span class="fc" id="L68">                        ejbs.add(new EjbDescriptorImpl&lt;&gt;(clazz));</span>
+                    }
+<span class="fc" id="L70">                }</span>
+<span class="fc" id="L71">            }</span>
+        };
+    }
+
+    private static class EjbDescriptorImpl&lt;T&gt; implements EjbDescriptor&lt;T&gt; {
+        private final Class&lt;T&gt; clazz;
+
+<span class="fc" id="L78">        public EjbDescriptorImpl(Class&lt;T&gt; clazz) {</span>
+<span class="fc" id="L79">            this.clazz = clazz;</span>
+<span class="fc" id="L80">        }</span>
+
+        @Override
+        public Class&lt;T&gt; getBeanClass() {
+<span class="fc" id="L84">            return clazz;</span>
+        }
+
+        @Override
+        public Collection&lt;BusinessInterfaceDescriptor&lt;?&gt;&gt; getLocalBusinessInterfaces() {
+<span class="fc" id="L89">            Stream&lt;Class&lt;?&gt;&gt; interfaces = Stream.empty();</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (clazz.isAnnotationPresent(LocalBean.class)) {</span>
+<span class="nc" id="L91">                interfaces = concat(interfaces, Stream.of(clazz));</span>
+            }
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (clazz.isAnnotationPresent(Local.class)) {</span>
+<span class="nc" id="L94">                interfaces = concat(interfaces, Arrays.&lt;Class&lt;?&gt;&gt;stream(clazz.getAnnotation(Local.class).value()));</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            } else if (!clazz.isAnnotationPresent(LocalBean.class)) {</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">                if (clazz.getInterfaces().length == 0) {</span>
+<span class="fc" id="L97">                    interfaces = Stream.of(clazz);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                } else if (clazz.getInterfaces().length == 1) {</span>
+<span class="nc" id="L99">                    interfaces = Stream.of(clazz.getInterfaces()[0]);</span>
+                }
+            }
+<span class="fc" id="L102">            return interfaces.&lt;BusinessInterfaceDescriptor&lt;?&gt;&gt;map(this::toBusinessInterfaceDescriptor)</span>
+<span class="fc" id="L103">                    .collect(toUnmodifiableList());</span>
+        }
+
+        private &lt;I&gt; BusinessInterfaceDescriptor&lt;I&gt; toBusinessInterfaceDescriptor(Class&lt;I&gt; cl) {
+<span class="fc" id="L107">            return () -&gt; cl;</span>
+        }
+
+        @Override
+        public Collection&lt;BusinessInterfaceDescriptor&lt;?&gt;&gt; getRemoteBusinessInterfaces() {
+<span class="fc" id="L112">            return Collections.emptyList();</span>
+        }
+
+        @Override
+        public String getEjbName() {
+<span class="pc bpc" id="L117" title="1 of 4 branches missed.">            if (isStateless() &amp;&amp; !clazz.getAnnotation(Stateless.class).name().isBlank()) {</span>
+<span class="nc" id="L118">                return clazz.getAnnotation(Stateless.class).name();</span>
+            }
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">            if (isSingleton() &amp;&amp; !clazz.getAnnotation(Singleton.class).name().isBlank()) {</span>
+<span class="nc" id="L121">                return clazz.getAnnotation(Singleton.class).name();</span>
+            }
+<span class="pc bpc" id="L123" title="3 of 4 branches missed.">            if (isStateful() &amp;&amp; !clazz.getAnnotation(Stateful.class).name().isBlank()) {</span>
+<span class="nc" id="L124">                return clazz.getAnnotation(Stateful.class).name();</span>
+            }
+<span class="fc" id="L126">            return clazz.getSimpleName();</span>
+        }
+
+        @Override
+        public Collection&lt;Method&gt; getRemoveMethods() {
+<span class="fc" id="L131">            return null;</span>
+        }
+
+        @Override
+        public boolean isStateless() {
+<span class="fc" id="L136">            return clazz.isAnnotationPresent(Stateless.class);</span>
+        }
+
+        @Override
+        public boolean isSingleton() {
+<span class="fc" id="L141">            return clazz.isAnnotationPresent(Singleton.class);</span>
+        }
+
+        @Override
+        public boolean isStateful() {
+<span class="fc" id="L146">            return clazz.isAnnotationPresent(Stateful.class);</span>
+        }
+
+        @Override
+        public boolean isMessageDriven() {
+<span class="fc" id="L151">            return false;</span>
+        }
+
+        @Override
+        public boolean isPassivationCapable() {
+<span class="nc" id="L156">            return false;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
