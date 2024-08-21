@@ -1,0 +1,3 @@
+com.github.jonasrutishauser.cdi.test.core.context
+com.github.jonasrutishauser.cdi.test.core.interceptor
+com.github.jonasrutishauser.cdi.test.core.junit
