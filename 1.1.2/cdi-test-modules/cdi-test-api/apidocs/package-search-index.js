@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.github.jonasrutishauser.cdi.test.api"},{"l":"com.github.jonasrutishauser.cdi.test.api.annotations"},{"l":"com.github.jonasrutishauser.cdi.test.api.context"}]
