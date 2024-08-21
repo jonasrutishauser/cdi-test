@@ -22,58 +22,10 @@
 		<maven.compiler.release>11</maven.compiler.release>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.junit</groupId>
-				<artifactId>junit-bom</artifactId>
-				<version>5.10.0</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>jakarta.platform</groupId>
-				<artifactId>jakarta.jakartaee-bom</artifactId>
-				<version>9.1.0</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.weld</groupId>
-				<artifactId>weld-core-bom</artifactId>
-				<version>4.0.3.Final</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-bom</artifactId>
-				<version>5.4.0</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.narayana</groupId>
-				<artifactId>narayana-bom</artifactId>
-				<version>7.0.0.Final</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<modules>
-		<module>cdi-test-api</module>
-		<module>cdi-test-core</module>
-		<module>cdi-test-jta</module>
-		<module>cdi-test-jndi</module>
-		<module>cdi-test-concurrency</module>
-		<module>cdi-test-jpa</module>
-		<module>cdi-test-ejb</module>
-		<module>cdi-test-validation</module>
-		<module>cdi-test-mp-config</module>
+		<module>cdi-test-modules</module>
 		<module>integration-tests</module>
-		<module>cdi-test-mp-metrics</module>
+		<module>cdi-test-bom</module>
 	</modules>
 
 	<scm>

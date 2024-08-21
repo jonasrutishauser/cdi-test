@@ -3,38 +3,35 @@
 
 	<parent>
 		<groupId>com.github.jonasrutishauser</groupId>
-		<artifactId>cdi-test</artifactId>
+		<artifactId>cdi-test-modules</artifactId>
 		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>cdi-test-jndi</artifactId>
+	<artifactId>cdi-test-mp-config</artifactId>
 
-	<description>JNDI (Resources) support for cdi-test</description>
-	<name>CDI Test JNDI</name>
+	<description>MicroProfile Config support for cdi-test</description>
+	<name>CDI Test microprofile config</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cdi-test-core</artifactId>
+			<artifactId>cdi-test-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>com.github.h-thurow</groupId>
-			<artifactId>simple-jndi</artifactId>
-			<version>0.23.0</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cdi-test-core</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
+			<groupId>io.smallrye.config</groupId>
+			<artifactId>smallrye-config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.2.220</version>
-			<scope>test</scope>
+			<groupId>jakarta.enterprise</groupId>
+			<artifactId>jakarta.enterprise.cdi-api</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -3,35 +3,26 @@
 
 	<parent>
 		<groupId>com.github.jonasrutishauser</groupId>
-		<artifactId>cdi-test</artifactId>
+		<artifactId>cdi-test-modules</artifactId>
 		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>cdi-test-jpa</artifactId>
+	<artifactId>cdi-test-jndi</artifactId>
 
-	<description>JPA support for cdi-test</description>
-	<name>CDI Test JPA</name>
+	<description>JNDI (Resources) support for cdi-test</description>
+	<name>CDI Test JNDI</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cdi-test-jndi</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>cdi-test-jta</artifactId>
+			<artifactId>cdi-test-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>jakarta.persistence</groupId>
-			<artifactId>jakarta.persistence-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-			<version>3.0.3</version>
+			<groupId>com.github.h-thurow</groupId>
+			<artifactId>simple-jndi</artifactId>
+			<version>0.23.0</version>
 		</dependency>
 
 		<dependency>

@@ -3,14 +3,14 @@
 
 	<parent>
 		<groupId>com.github.jonasrutishauser</groupId>
-		<artifactId>cdi-test</artifactId>
+		<artifactId>cdi-test-modules</artifactId>
 		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>cdi-test-mp-config</artifactId>
+	<artifactId>cdi-test-validation</artifactId>
 
-	<description>MicroProfile Config support for cdi-test</description>
-	<name>CDI Test microprofile config</name>
+	<description>Jakarta Validation support for cdi-test</description>
+	<name>CDI Test Validation</name>
 
 	<dependencies>
 		<dependency>
@@ -26,12 +26,22 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.smallrye.config</groupId>
-			<artifactId>smallrye-config</artifactId>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator-cdi</artifactId>
+			<version>8.0.1.Final</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>jakarta.enterprise</groupId>
-			<artifactId>jakarta.enterprise.cdi-api</artifactId>
+			<groupId>org.glassfish.expressly</groupId>
+			<artifactId>expressly</artifactId>
+			<version>5.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
