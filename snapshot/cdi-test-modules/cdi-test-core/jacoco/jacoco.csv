@@ -8,8 +8,8 @@ CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestM
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiContainer,13,218,3,11,4,45,3,14,0,10
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestExtension.MockitoHelper,0,17,0,2,0,6,0,3,0,2
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,SecurityServicesImpl.TestPrincipal,0,9,0,0,0,4,0,2,0,2
-CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,TestMethodInvocationContext,21,15,0,0,7,6,7,1,7,1
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,SecurityServicesImpl,2,18,1,1,0,5,1,4,0,4
+CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,TestMethodInvocationContext,21,15,0,0,7,6,7,1,7,1
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestJunitExtension,0,116,1,3,0,21,1,8,0,7
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.junit,CdiTestMethodInterceptor,6,96,1,1,1,21,1,7,0,7
 CDI Test Implementation,com.github.jonasrutishauser.cdi.test.core.context,TestContext,16,135,6,10,5,23,6,15,1,12
